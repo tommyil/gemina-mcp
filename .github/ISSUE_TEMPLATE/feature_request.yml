@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest a new example, integration, or improvement to this repository.
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Note: this repository is for the install/discovery/examples surface. Feature requests for the **MCP server itself** (new tools, new fields in the response, new file types) should also go here — we forward them to the server team.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      placeholder: "I'm building X and I need to be able to do Y, but FileTag currently does Z."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to see?
+      placeholder: "A new example for n8n. / A new optional field in metadata for X. / A loader for framework Y."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Type of request
+      options:
+        - label: New example/integration in this repo
+        - label: Change to the live MCP server's behavior
+        - label: Documentation improvement
+        - label: Other

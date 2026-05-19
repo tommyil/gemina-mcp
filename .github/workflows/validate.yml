@@ -1,0 +1,47 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  json-snippets:
+    name: validate JSON in llms-install.md + manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate server.json
+        run: python -m json.tool < server.json > /dev/null
+
+      - name: Validate glama.json
+        run: python -m json.tool < glama.json > /dev/null
+
+      - name: Extract and validate JSON snippets from llms-install.md
+        run: |
+          python - <<'PY'
+          import json, re, sys
+          from pathlib import Path
+
+          path = Path("llms-install.md")
+          text = path.read_text(encoding="utf-8")
+          blocks = re.findall(r"```json\n(.*?)```", text, re.DOTALL)
+          if not blocks:
+              print("No JSON blocks found in llms-install.md", file=sys.stderr)
+              sys.exit(1)
+
+          failed = []
+          for i, block in enumerate(blocks, start=1):
+              try:
+                  json.loads(block)
+              except json.JSONDecodeError as e:
+                  failed.append((i, str(e), block[:120]))
+
+          if failed:
+              for idx, err, head in failed:
+                  print(f"JSON block #{idx} failed: {err}\n  {head!r}", file=sys.stderr)
+              sys.exit(1)
+          print(f"All {len(blocks)} JSON blocks in llms-install.md parse cleanly.")
+          PY

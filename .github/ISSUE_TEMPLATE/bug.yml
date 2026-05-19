@@ -1,0 +1,77 @@
+name: Bug report
+description: Report a bug in the live FileTag MCP server, the REST API, or one of the examples.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        - For security issues, **do not file a public issue** — email security@gemina.co.
+        - For "how do I install in X?" questions, please use the [integration help template](https://github.com/tommyil/gemina-mcp/issues/new?template=integration_help.yml) instead.
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Which surface is affected?
+      options:
+        - MCP server (api.gemina.co/api/v1/mcp/)
+        - REST API (api.gemina.co/api/v1/filetag)
+        - Example script in this repo
+        - Documentation in README or llms-install.md
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug clearly. Include error messages verbatim if you have them.
+      placeholder: |
+        I called tag_file via Cursor and got a 500 error after 30 seconds.
+        The exact error was: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Smallest possible recipe that triggers the bug.
+      placeholder: |
+        1. Install MCP config with snippet from README (Cursor variant)
+        2. Drag this PDF into chat: <file or URL>
+        3. Ask agent to "tag this file"
+        4. Observe: 500 error
+    validations:
+      required: true
+
+  - type: input
+    id: client
+    attributes:
+      label: MCP client + version (if applicable)
+      placeholder: "e.g., Cursor 0.45.6, Claude Desktop 0.7.4, custom Python client"
+
+  - type: input
+    id: os
+    attributes:
+      label: OS + version
+      placeholder: "e.g., macOS 14.5, Windows 11 24H2, Ubuntu 22.04 (WSL)"
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Logs, screenshots, network traces, weird timings, environment quirks.
+
+  - type: checkboxes
+    id: contact
+    attributes:
+      label: Confirmations
+      options:
+        - label: I have searched existing issues to avoid duplicates.
+          required: true
+        - label: I have stripped any API keys or sensitive data from the report.
+          required: true

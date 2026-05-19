@@ -1,0 +1,18 @@
+name: links
+
+on:
+  schedule:
+    # Weekly, Monday 09:00 UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch: {}
+
+jobs:
+  lychee:
+    name: lychee link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --exclude-mail --accept 200,206,429 './**/*.md' './**/*.yml' './**/*.yaml' './server.json' './glama.json'
+          fail: true

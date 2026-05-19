@@ -1,0 +1,24 @@
+{
+  "document_id": "abc-123",
+  "suggested_filename": "2026-02-15_Acme-Corp_Invoice_12345.pdf",
+  "metadata": {
+    "document_type": "invoice",
+    "vendor": "Acme Corp",
+    "date": "2026-02-15",
+    "amount": 7200,
+    "currency": "ILS",
+    "document_number": "12345",
+    "title": "Invoice",
+    "tags": ["vendor", "invoice"]
+  },
+  "filename_patterns": {
+    "date_first": "2026-02-15_Invoice_12345.pdf",
+    "type_first": "Invoice_12345_2026-02-15.pdf",
+    "vendor_first": "Acme-Corp_Invoice_2026-02-15.pdf",
+    "date_vendor": "2026-02-15_Acme-Corp.pdf",
+    "vendor_date": "Acme-Corp_2026-02-15.pdf",
+    "compact": "Acme-Corp_Invoice.pdf"
+  },
+  "enriched_file_url": "https://api.gemina.co/files/tmp_abc123.pdf",
+  "enriched_file_expires_at": "2026-02-15T12:15:00Z"
+}

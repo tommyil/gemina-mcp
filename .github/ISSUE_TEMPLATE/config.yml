@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussion / Q&A
+    url: https://github.com/tommyil/gemina-mcp/discussions
+    about: For open-ended questions, share-what-you-built threads, or design discussion.
+  - name: Sales, billing, or account questions
+    url: https://www.gemina.co/contact
+    about: Anything not specific to this repository's code or docs.
+  - name: Security vulnerability
+    url: https://github.com/tommyil/gemina-mcp/blob/main/SECURITY.md
+    about: Please email security@gemina.co directly — do not file a public issue.
