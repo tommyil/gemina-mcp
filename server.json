@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "co.gemina/filetag",
   "title": "Gemina FileTag",
-  "description": "Tag, rename, and enrich PDFs and images. Free tier: 1,500 tags/month, no credit card. Streamable HTTP MCP server with X-API-Key auth. Get a key at https://console.gemina.co/registration/create-account",
+  "description": "Tag, rename, and enrich PDFs and images. Free tier: 1,500 tags/month, no credit card.",
   "version": "1.0.0",
   "repository": {
     "url": "https://github.com/tommyil/gemina-mcp",
