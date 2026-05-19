@@ -7,7 +7,7 @@
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/tommyil/gemina-mcp/main/assets/logo.png",
-      "sizes": "400x400",
+      "sizes": ["400x400"],
       "mimeType": "image/png"
     }
   ],
