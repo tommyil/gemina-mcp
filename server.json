@@ -3,7 +3,14 @@
   "name": "co.gemina/filetag",
   "title": "Gemina FileTag",
   "description": "Tag, rename, and enrich PDFs and images. Free tier: 1,500 tags/month, no credit card.",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/tommyil/gemina-mcp/main/assets/logo.png",
+      "sizes": "400x400",
+      "mimeType": "image/png"
+    }
+  ],
   "repository": {
     "url": "https://github.com/tommyil/gemina-mcp",
     "source": "github"
