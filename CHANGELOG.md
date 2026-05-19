@@ -4,6 +4,11 @@ All notable changes to this repository — and to the Gemina FileTag MCP server'
 
 ## [Unreleased]
 
+## [1.0.2] — 2026-05-19
+
+### Changed
+- Moved registry icon from `raw.githubusercontent.com/tommyil/gemina-mcp/...` to `https://www.gemina.co/assets/filetag-logo.png`. Stable, branded URL that survives any future repo rename or org move.
+
 ## [1.0.1] — 2026-05-19
 
 ### Added
@@ -32,6 +37,7 @@ The Gemina FileTag MCP server is a hosted service; only server-side changes that
 
 - **2026-05** — Public launch. Endpoint: `https://api.gemina.co/api/v1/mcp/`. Tools: `files_create_upload`, `tag_file`, `tag_url`. Auth: `X-API-Key` or `Authorization: Bearer`. Free tier: 1,500 calls/month.
 
-[Unreleased]: https://github.com/tommyil/gemina-mcp/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/tommyil/gemina-mcp/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/tommyil/gemina-mcp/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/tommyil/gemina-mcp/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/tommyil/gemina-mcp/releases/tag/v1.0.0
