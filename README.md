@@ -281,4 +281,6 @@ Examples PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md). The server it
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). The MCP server itself is a hosted service governed by [Gemina's Terms of Service](https://www.gemina.co/terms-of-service).
+The contents of this repository — install snippets, example code, documentation, configuration files, and sample assets — are released under the [MIT License](./LICENSE).
+
+The Gemina FileTag MCP server itself is a hosted closed-source service operated by Gemina (https://gemina.co) and is **not** covered by this license. Use of the server is governed by [Gemina's Terms of Service](https://www.gemina.co/terms-of-service) and [Privacy Policy](https://www.gemina.co/privacy-policy).
