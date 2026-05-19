@@ -1,7 +1,8 @@
 {
-  "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-06-18/server.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "co.gemina/filetag",
-  "description": "Remote MCP server for tagging PDFs and images. Free tier (1,500 tags/month). Works with Claude Desktop, Cursor, VS Code, Cline, Windsurf, Hermes, OpenClaw.",
+  "title": "Gemina FileTag",
+  "description": "Tag, rename, and enrich PDFs and images. Free tier: 1,500 tags/month, no credit card. Streamable HTTP MCP server with X-API-Key auth. Get a key at https://console.gemina.co/registration/create-account",
   "version": "1.0.0",
   "repository": {
     "url": "https://github.com/tommyil/gemina-mcp",
@@ -9,16 +10,6 @@
   },
   "websiteUrl": "https://www.gemina.co/filetag",
   "documentationUrl": "https://www.gemina.co/docs/filetag",
-  "vendor": {
-    "name": "Gemina",
-    "url": "https://www.gemina.co",
-    "email": "info@gemina.co"
-  },
-  "license": {
-    "type": "Proprietary",
-    "url": "https://www.gemina.co/terms-of-service",
-    "note": "The MCP server itself is a hosted closed-source service. Examples and install snippets in the linked repository are MIT-licensed."
-  },
   "remotes": [
     {
       "type": "streamable-http",
@@ -26,92 +17,11 @@
       "headers": [
         {
           "name": "X-API-Key",
-          "description": "Gemina API key. Get a free key (1,500 tags/month, no credit card) at https://console.gemina.co/registration/create-account",
-          "isSecret": true,
-          "isRequired": true
+          "description": "Gemina API key. Get one free at https://console.gemina.co/registration/create-account",
+          "isRequired": true,
+          "isSecret": true
         }
-      ],
-      "alternateAuth": {
-        "header": "Authorization",
-        "format": "Bearer <api-key>",
-        "description": "Bearer-token equivalent of the X-API-Key header. Either auth method is accepted; the same key works for both."
-      }
+      ]
     }
-  ],
-  "tools": [
-    {
-      "name": "files_create_upload",
-      "description": "Reserve a pre-signed upload slot. Returns file_id and a PUT URL to upload the document bytes to.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "filename": {
-            "type": "string",
-            "description": "Original filename. Used to infer content type if mimetype isn't provided."
-          }
-        },
-        "required": ["filename"]
-      }
-    },
-    {
-      "name": "tag_file",
-      "description": "Tag a previously-uploaded file by file_id. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "file_id": {
-            "type": "string",
-            "description": "The file_id returned by files_create_upload."
-          }
-        },
-        "required": ["file_id"]
-      }
-    },
-    {
-      "name": "tag_url",
-      "description": "Fetch and tag a publicly-accessible HTTPS URL directly. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "Publicly-accessible HTTPS URL of a PDF, PNG, JPEG, GIF, or WebP file."
-          }
-        },
-        "required": ["url"]
-      }
-    }
-  ],
-  "supportedFileTypes": [
-    "application/pdf",
-    "image/png",
-    "image/jpeg",
-    "image/gif",
-    "image/webp"
-  ],
-  "maxFileSize": "50MB",
-  "rateLimits": {
-    "burst": "~10 calls/second per API key",
-    "monthly": "1,500 free tier; larger on paid plans"
-  },
-  "pricing": {
-    "freeTier": {
-      "calls": 1500,
-      "period": "month",
-      "creditCardRequired": false
-    },
-    "details": "https://www.gemina.co/pricing"
-  },
-  "keywords": [
-    "document-ai",
-    "pdf",
-    "metadata",
-    "tagging",
-    "rag",
-    "rag-ingestion",
-    "invoice",
-    "email-automation",
-    "vector-store-metadata",
-    "filename"
   ]
 }

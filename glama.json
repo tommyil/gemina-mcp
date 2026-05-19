@@ -9,11 +9,64 @@
   "repository": "https://github.com/tommyil/gemina-mcp",
   "documentation": "https://www.gemina.co/docs/filetag",
   "license": "Proprietary (server) / MIT (examples)",
+  "vendor": {
+    "name": "Gemina",
+    "url": "https://www.gemina.co",
+    "email": "info@gemina.co"
+  },
   "transport": "streamable-http",
   "endpoint": "https://api.gemina.co/api/v1/mcp/",
   "auth": {
     "type": "header",
     "header": "X-API-Key",
-    "signup": "https://console.gemina.co/registration/create-account"
-  }
+    "alternateHeader": "Authorization: Bearer <api-key>",
+    "signup": "https://console.gemina.co/registration/create-account",
+    "note": "Same key works for both MCP and REST. Either auth method is accepted."
+  },
+  "tools": [
+    {
+      "name": "files_create_upload",
+      "description": "Reserve a pre-signed upload slot. Returns file_id and a PUT URL to upload the document bytes to."
+    },
+    {
+      "name": "tag_file",
+      "description": "Tag a previously-uploaded file by file_id. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL."
+    },
+    {
+      "name": "tag_url",
+      "description": "Fetch and tag a publicly-accessible HTTPS URL directly. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL."
+    }
+  ],
+  "supportedFileTypes": [
+    "application/pdf",
+    "image/png",
+    "image/jpeg",
+    "image/gif",
+    "image/webp"
+  ],
+  "maxFileSize": "50MB",
+  "rateLimits": {
+    "burst": "~10 calls/second per API key",
+    "monthly": "1,500 free tier; larger on paid plans"
+  },
+  "pricing": {
+    "freeTier": {
+      "calls": 1500,
+      "period": "month",
+      "creditCardRequired": false
+    },
+    "details": "https://www.gemina.co/pricing"
+  },
+  "keywords": [
+    "document-ai",
+    "pdf",
+    "metadata",
+    "tagging",
+    "rag",
+    "rag-ingestion",
+    "invoice",
+    "email-automation",
+    "vector-store-metadata",
+    "filename"
+  ]
 }
