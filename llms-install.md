@@ -42,18 +42,21 @@ Each snippet uses the `X-API-Key` header variant. Replace `<paste-your-key-here>
 
 ### Claude Desktop
 
-Claude Desktop's `claude_desktop_config.json` does not support remote HTTP MCP servers directly — the file schema is stdio-only. Two paths:
+Claude Desktop's `claude_desktop_config.json` does not support remote HTTP MCP servers directly — the file schema is stdio-only. The Custom Connectors UI (**Customize → Connectors**) is OAuth-only and cannot supply the `X-API-Key` header, so it doesn't work for Gemina either. The supported path is the `mcp-remote` stdio bridge.
 
-**For human users** — use the Custom Connectors UI: Settings → Connectors → Add custom connector → paste `https://api.gemina.co/api/v1/mcp/` → API key auth.
+**Prerequisites**
 
-**For agents writing config files** — use the `mcp-remote` stdio bridge (requires Node.js 18+).
+- Node.js 18+ (on PATH, or use the absolute path to `npx` in the `command` field).
+- In Claude Desktop, **Settings → Capabilities**, enable: *Code execution and file creation* → *Allow network egress* → *Domain allowlist: All domains* (or add `storage.googleapis.com` explicitly, where signed enriched-file URLs live). Without egress, tag results return correctly but Claude can't download the enriched-file URL — error: "Host not in allowlist". Capability changes only apply to new chats.
 
-File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows).
+**Config**
+
+File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows). In Claude Desktop, **Settings → Developer → Edit Config** opens it.
 
 ```json
 {
   "mcpServers": {
-    "gemina": {
+    "FileTag": {
       "command": "npx",
       "args": [
         "-y",
@@ -70,7 +73,11 @@ File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) 
 }
 ```
 
-Note no space after `X-API-Key:` in the `--header` arg (shell-split workaround), and the env-var indirection keeps the literal key out of `args`.
+**Notes**
+
+- No space after `X-API-Key:` in the `--header` arg — `npx` shell-split workaround.
+- Env-var indirection keeps the literal API key out of `args` (where it would otherwise show in process listings).
+- Windows + `spawn npx ENOENT`: replace `"command": "npx"` with the absolute path from `where npx` (forward slashes work in JSON, e.g. `"C:/Program Files/nodejs/npx.cmd"`).
 
 ### Cursor
 
@@ -79,7 +86,7 @@ File: `~/.cursor/mcp.json`. Cursor accepts remote Streamable HTTP servers direct
 ```json
 {
   "mcpServers": {
-    "gemina": {
+    "FileTag": {
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
         "X-API-Key": "<paste-your-key-here>"
@@ -94,7 +101,7 @@ File: `~/.cursor/mcp.json`. Cursor accepts remote Streamable HTTP servers direct
 One-line CLI registration:
 
 ```bash
-claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/ \
+claude mcp add --transport http FileTag https://api.gemina.co/api/v1/mcp/ \
   --header "X-API-Key: <paste-your-key-here>"
 ```
 
@@ -105,7 +112,7 @@ File: `.vscode/mcp.json` per workspace.
 ```json
 {
   "servers": {
-    "gemina": {
+    "FileTag": {
       "type": "http",
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
@@ -123,7 +130,7 @@ In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` 
 ```json
 {
   "mcpServers": {
-    "gemina": {
+    "FileTag": {
       "type": "streamableHttp",
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
@@ -151,7 +158,7 @@ File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not
 ```json
 {
   "mcpServers": {
-    "gemina": {
+    "FileTag": {
       "serverUrl": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
         "X-API-Key": "<paste-your-key-here>"
@@ -164,7 +171,7 @@ File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not
 ### OpenClaw
 
 ```bash
-openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http","headers":{"X-API-Key":"<paste-your-key-here>"}}'
+openclaw mcp set FileTag '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http","headers":{"X-API-Key":"<paste-your-key-here>"}}'
 ```
 
 ### Hermes-Agent
@@ -173,7 +180,7 @@ Append under `mcp_servers` in `~/.hermes/config.yaml`:
 
 ```yaml
 mcp_servers:
-  gemina:
+  FileTag:
     url: "https://api.gemina.co/api/v1/mcp/"
     headers:
       X-API-Key: "<paste-your-key-here>"

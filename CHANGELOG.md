@@ -6,7 +6,13 @@ All notable changes to this repository — and to the Gemina FileTag MCP server'
 
 ### Fixed
 - Cline install snippet now includes `"type": "streamableHttp"` (required for Cline to recognize the remote MCP server). README and `llms-install.md` both updated; `llms-install.md` gains a dedicated Cline section.
-- Claude Desktop install instructions rewritten. The previous JSON-config snippet did not actually connect — `claude_desktop_config.json` is stdio-only. README now documents the Custom Connectors UI flow (Settings → Connectors → Add custom connector). `llms-install.md` keeps a JSON config example using the `mcp-remote` stdio bridge for agents that write config files, plus a short pointer to the UI path for humans.
+- Claude Desktop install instructions rewritten end-to-end. Confirmed via live testing:
+    - Custom Connectors UI (**Customize → Connectors**) is OAuth-only and does not accept `X-API-Key` — it cannot authenticate against Gemina. README and `llms-install.md` drop the UI path entirely and make the `mcp-remote` stdio bridge the only documented option.
+    - Added prerequisites: Node.js 18+ and the **Settings → Capabilities → Allow network egress** toggle (with `storage.googleapis.com` in the allowlist or "All domains" selected). Without egress, tag results return correctly but Claude can't download the enriched-file URL — fails with "Host not in allowlist". Capability changes only apply to new chats.
+    - Added Windows-specific guidance for `spawn npx ENOENT`: replace `"command": "npx"` with the absolute path from `where npx`.
+
+### Changed
+- Renamed the MCP server identifier from `gemina` to `FileTag` across every install snippet (Claude Desktop, Cursor, Claude Code CLI, VS Code, Cline, Codex CLI, Windsurf, OpenClaw, Hermes-Agent). The identifier is the local-config key only; the endpoint URL and product naming are unchanged.
 
 ## [1.0.2] — 2026-05-19
 
