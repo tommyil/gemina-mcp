@@ -12,7 +12,7 @@ All notable changes to this repository — and to the Gemina FileTag MCP server'
     - Added Windows-specific guidance for `spawn npx ENOENT`: replace `"command": "npx"` with the absolute path from `where npx`.
 
 ### Changed
-- Renamed the MCP server identifier from `gemina` to `FileTag` across every install snippet (Claude Desktop, Cursor, Claude Code CLI, VS Code, Cline, Codex CLI, Windsurf, OpenClaw, Hermes-Agent). The identifier is the local-config key only; the endpoint URL and product naming are unchanged.
+- Renamed the MCP server identifier back to `gemina` (from the short-lived `FileTag`). Lowercase matches the ecosystem convention used in every official MCP example (`filesystem`, `brave-search`, `github`, `postgres`) and aligns with the endpoint URL (`api.gemina.co`). Future-proofs the local-config key for when the MCP surface expands beyond FileTag to cover the full Gemina platform — by then a per-feature identifier would be misleading. Affects every install snippet (Claude Desktop, Cursor, Claude Code CLI, VS Code, Cline, Codex CLI, Windsurf, OpenClaw, Hermes-Agent); endpoint URL and product naming unchanged.
 
 ## [1.0.2] — 2026-05-19
 

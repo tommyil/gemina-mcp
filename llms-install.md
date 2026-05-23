@@ -56,7 +56,7 @@ File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) 
 ```json
 {
   "mcpServers": {
-    "FileTag": {
+    "gemina": {
       "command": "npx",
       "args": [
         "-y",
@@ -86,7 +86,7 @@ File: `~/.cursor/mcp.json`. Cursor accepts remote Streamable HTTP servers direct
 ```json
 {
   "mcpServers": {
-    "FileTag": {
+    "gemina": {
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
         "X-API-Key": "<paste-your-key-here>"
@@ -101,7 +101,7 @@ File: `~/.cursor/mcp.json`. Cursor accepts remote Streamable HTTP servers direct
 One-line CLI registration:
 
 ```bash
-claude mcp add --transport http FileTag https://api.gemina.co/api/v1/mcp/ \
+claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/ \
   --header "X-API-Key: <paste-your-key-here>"
 ```
 
@@ -112,7 +112,7 @@ File: `.vscode/mcp.json` per workspace.
 ```json
 {
   "servers": {
-    "FileTag": {
+    "gemina": {
       "type": "http",
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
@@ -130,7 +130,7 @@ In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` 
 ```json
 {
   "mcpServers": {
-    "FileTag": {
+    "gemina": {
       "type": "streamableHttp",
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
@@ -158,7 +158,7 @@ File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not
 ```json
 {
   "mcpServers": {
-    "FileTag": {
+    "gemina": {
       "serverUrl": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
         "X-API-Key": "<paste-your-key-here>"
@@ -171,7 +171,7 @@ File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not
 ### OpenClaw
 
 ```bash
-openclaw mcp set FileTag '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http","headers":{"X-API-Key":"<paste-your-key-here>"}}'
+openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http","headers":{"X-API-Key":"<paste-your-key-here>"}}'
 ```
 
 ### Hermes-Agent
@@ -180,7 +180,7 @@ Append under `mcp_servers` in `~/.hermes/config.yaml`:
 
 ```yaml
 mcp_servers:
-  FileTag:
+  gemina:
     url: "https://api.gemina.co/api/v1/mcp/"
     headers:
       X-API-Key: "<paste-your-key-here>"
