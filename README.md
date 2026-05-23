@@ -150,6 +150,7 @@ In Cline's MCP settings (gear icon → MCP Servers → Edit Config), add:
 {
   "mcpServers": {
     "gemina": {
+      "type": "streamableHttp",
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
         "X-API-Key": "<paste-your-key-here>"

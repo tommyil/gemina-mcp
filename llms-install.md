@@ -16,7 +16,7 @@
 
 ## 1. Prerequisites
 
-- An MCP-compatible client that speaks **Streamable HTTP** (Claude Desktop, Cursor, VS Code, Codex CLI, Windsurf, Claude Code, OpenClaw, Hermes-Agent, MCP Inspector — or any other client supporting the spec).
+- An MCP-compatible client that speaks **Streamable HTTP** (Claude Desktop, Cursor, Claude Code, VS Code, Cline, Codex CLI, Windsurf, OpenClaw, Hermes-Agent, MCP Inspector — or any other client supporting the spec).
 - A Gemina API key. Get one free (no credit card) at: https://console.gemina.co/registration/create-account
 
 ## 2. Endpoint
@@ -92,6 +92,24 @@ File: `.vscode/mcp.json` per workspace.
   "servers": {
     "gemina": {
       "type": "http",
+      "url": "https://api.gemina.co/api/v1/mcp/",
+      "headers": {
+        "X-API-Key": "<paste-your-key-here>"
+      }
+    }
+  }
+}
+```
+
+### Cline
+
+In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` field is required for Cline to recognize a remote Streamable HTTP server:
+
+```json
+{
+  "mcpServers": {
+    "gemina": {
+      "type": "streamableHttp",
       "url": "https://api.gemina.co/api/v1/mcp/",
       "headers": {
         "X-API-Key": "<paste-your-key-here>"

@@ -4,6 +4,9 @@ All notable changes to this repository — and to the Gemina FileTag MCP server'
 
 ## [Unreleased]
 
+### Fixed
+- Cline install snippet now includes `"type": "streamableHttp"` (required for Cline to recognize the remote MCP server). README and `llms-install.md` both updated; `llms-install.md` gains a dedicated Cline section.
+
 ## [1.0.2] — 2026-05-19
 
 ### Changed
