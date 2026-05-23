@@ -73,20 +73,15 @@ You need an API key. Get one free (no credit card) at **https://console.gemina.c
 <details>
 <summary><b>Claude Desktop</b></summary>
 
-File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows).
+Claude Desktop connects to remote MCP servers via the **Custom Connectors UI**, not the JSON config file (`claude_desktop_config.json` is stdio-only).
 
-```json
-{
-  "mcpServers": {
-    "gemina": {
-      "url": "https://api.gemina.co/api/v1/mcp/",
-      "headers": {
-        "X-API-Key": "<paste-your-key-here>"
-      }
-    }
-  }
-}
-```
+1. Open Claude Desktop → **Settings** → **Connectors**
+2. Scroll to the bottom, click **Add custom connector**
+3. Paste the server URL: `https://api.gemina.co/api/v1/mcp/`
+4. When prompted for authentication: select API key, paste your Gemina key
+5. Restart Claude Desktop
+
+The `gemina` connector and its three tools (`files_create_upload`, `tag_file`, `tag_url`) will appear in the conversation tool list.
 
 </details>
 

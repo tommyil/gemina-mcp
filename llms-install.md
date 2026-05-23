@@ -42,24 +42,39 @@ Each snippet uses the `X-API-Key` header variant. Replace `<paste-your-key-here>
 
 ### Claude Desktop
 
-File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows). Restart Claude Desktop after editing.
+Claude Desktop's `claude_desktop_config.json` does not support remote HTTP MCP servers directly — the file schema is stdio-only. Two paths:
+
+**For human users** — use the Custom Connectors UI: Settings → Connectors → Add custom connector → paste `https://api.gemina.co/api/v1/mcp/` → API key auth.
+
+**For agents writing config files** — use the `mcp-remote` stdio bridge (requires Node.js 18+).
+
+File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows).
 
 ```json
 {
   "mcpServers": {
     "gemina": {
-      "url": "https://api.gemina.co/api/v1/mcp/",
-      "headers": {
-        "X-API-Key": "<paste-your-key-here>"
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://api.gemina.co/api/v1/mcp/",
+        "--header",
+        "X-API-Key:${GEMINA_API_KEY}"
+      ],
+      "env": {
+        "GEMINA_API_KEY": "<paste-your-key-here>"
       }
     }
   }
 }
 ```
 
+Note no space after `X-API-Key:` in the `--header` arg (shell-split workaround), and the env-var indirection keeps the literal key out of `args`.
+
 ### Cursor
 
-File: `~/.cursor/mcp.json`. Same shape as Claude Desktop.
+File: `~/.cursor/mcp.json`. Cursor accepts remote Streamable HTTP servers directly.
 
 ```json
 {
