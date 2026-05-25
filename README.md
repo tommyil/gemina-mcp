@@ -310,6 +310,10 @@ Full details on the [Gemina Trust Center](https://www.gemina.co/trust-center).
 - ✉️ Email: [info@gemina.co](mailto:info@gemina.co)
 - 🔒 Security: see [SECURITY.md](./SECURITY.md)
 
+## For aggregators and directory listings
+
+The `Dockerfile` at the repo root is **not for end users.** It exists so directory operators (e.g. Glama's `/mcp/servers/` tier) can build a container that introspects the public tool surface without provisioning credentials. The container runs [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) against `https://api.gemina.co/api/v1/mcp/public/` — a read-only discovery endpoint that serves `initialize` / `tools/list` / `prompts/list` to anonymous callers but refuses `tools/call`. End users should follow the **Quick install** section above and connect to the authenticated endpoint with their personal API key.
+
 ## Contributing
 
 Examples PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md). The server itself is closed-source, so PRs that touch the actual MCP server logic will be declined, but bug reports against the live server are very welcome.
