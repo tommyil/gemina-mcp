@@ -66,4 +66,4 @@ Each attachment counts as one FileTag call. With the free tier's 1,500 calls/mon
 
 - Schedule with cron / launchd / Task Scheduler to run every 15 minutes.
 - Push the tagged metadata into your accounting system (QuickBooks, Xero, etc.).
-- For Outlook/Microsoft 365, see [outlook-attachment-triage](../outlook-attachment-triage) _(coming soon)_.
+- For Outlook/Microsoft 365, an `outlook-attachment-triage` example is _coming soon_.

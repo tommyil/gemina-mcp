@@ -14,5 +14,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --exclude-mail --accept 200,206,429 './**/*.md' './**/*.yml' './**/*.yaml' './server.json' './glama.json'
+          # 403: npmjs.com anti-bot blocks crawlers; 405: api.gemina.co MCP endpoint only accepts POST (GET → 405, which means it's alive)
+          args: --no-progress --accept 200,206,403,405,429 './**/*.md' './**/*.yml' './**/*.yaml' './server.json' './glama.json'
           fail: true
