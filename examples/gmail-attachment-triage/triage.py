@@ -34,6 +34,9 @@ SUPPORTED_MIME = {
     "image/jpeg",
     "image/gif",
     "image/webp",
+    "image/heic",
+    "image/heif",
+    "image/avif",
 }
 LABEL_MAP = {
     "invoice": "FileTag/Invoices",

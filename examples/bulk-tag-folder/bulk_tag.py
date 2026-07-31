@@ -21,7 +21,7 @@ import requests
 
 API_BASE = "https://api.gemina.co"
 TAG_ENDPOINT = f"{API_BASE}/api/v1/filetag"
-SUPPORTED_EXTS = {".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp"}
+SUPPORTED_EXTS = {".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".heic", ".heif", ".hif", ".avif"}
 
 
 def iter_documents(root: Path) -> list[Path]:

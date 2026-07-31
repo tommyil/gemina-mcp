@@ -42,7 +42,10 @@
     "image/png",
     "image/jpeg",
     "image/gif",
-    "image/webp"
+    "image/webp",
+    "image/heic",
+    "image/heif",
+    "image/avif"
   ],
   "maxFileSize": "50MB",
   "rateLimits": {

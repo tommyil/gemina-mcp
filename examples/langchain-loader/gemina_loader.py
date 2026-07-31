@@ -15,7 +15,7 @@ from langchain_core.document_loaders import BaseLoader
 from langchain_core.documents import Document
 
 TAG_ENDPOINT = "https://api.gemina.co/api/v1/filetag"
-SUPPORTED_EXTS = {".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp"}
+SUPPORTED_EXTS = {".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".heic", ".heif", ".hif", ".avif"}
 
 
 class GeminaFileTagLoader(BaseLoader):

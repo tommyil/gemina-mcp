@@ -16,7 +16,7 @@ from llama_index.core import Document
 from llama_index.core.readers.base import BaseReader
 
 TAG_ENDPOINT = "https://api.gemina.co/api/v1/filetag"
-SUPPORTED_EXTS = {".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp"}
+SUPPORTED_EXTS = {".pdf", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".heic", ".heif", ".hif", ".avif"}
 
 
 class GeminaFileTagReader(BaseReader):

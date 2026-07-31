@@ -4,11 +4,11 @@ Walk a local directory, tag every supported file with Gemina FileTag, and write 
 
 ## What it does
 
-For every PDF/PNG/JPEG/GIF/WebP in the input directory (recursive):
+For every PDF/PNG/JPEG/GIF/WebP/HEIC/AVIF in the input directory (recursive):
 
 1. Uploads to FileTag's REST endpoint.
 2. Writes the JSON response to `output/<original-filename>.json`.
-3. Downloads the enriched copy (PDF metadata or EXIF embedded) under the API's suggested filename into `output/enriched/`.
+3. Downloads the enriched copy (PDF metadata or EXIF embedded; HEIC/AVIF copies are returned renamed but without embedded metadata) under the API's suggested filename into `output/enriched/`.
 4. Prints a one-line summary per file.
 
 Skips files that have already been tagged (idempotent on re-run — based on the existence of the JSON output).

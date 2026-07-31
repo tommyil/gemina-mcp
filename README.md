@@ -29,7 +29,7 @@ Send a PDF or image. Get back structured metadata, six suggested filenames, and 
 <details>
 <summary><b>Sample input → sample output</b> (click to expand)</summary>
 
-**Input:** any PDF or image up to 50 MB (PDF, PNG, JPEG, GIF, WebP).
+**Input:** any PDF or image up to 50 MB (PDF, PNG, JPEG, GIF, WebP, HEIC, AVIF).
 
 **Output:**
 

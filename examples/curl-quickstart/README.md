@@ -46,7 +46,7 @@ curl -sX POST https://api.gemina.co/api/v1/filetag \
 
 ## Download the enriched copy
 
-The response includes an `enriched_file_url` — a short-lived (15 minutes) signed URL that points to your file with metadata embedded into PDF properties or image EXIF.
+The response includes an `enriched_file_url` — a short-lived (15 minutes) signed URL that points to your file with metadata embedded into PDF properties or image EXIF (HEIC/AVIF copies are returned renamed but without embedded metadata — check the `embedded` flag).
 
 ```bash
 # Pull the URL out of the response, then download it under its suggested filename

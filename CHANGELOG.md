@@ -4,6 +4,9 @@ All notable changes to this repository — and to the Gemina FileTag MCP server'
 
 ## [Unreleased]
 
+### Added
+- HEIC, HEIF, and AVIF input support (`image/heic`, `image/heif`, `image/avif`; extensions `.heic`, `.heif`, `.hif`, `.avif`). Advertised in `glama.json` `supportedFileTypes`, README, `llms-install.md`, and all example scripts. Enriched copies of HEIC/AVIF inputs are returned renamed but without embedded metadata.
+
 ### Fixed
 - Cline install snippet now includes `"type": "streamableHttp"` (required for Cline to recognize the remote MCP server). README and `llms-install.md` both updated; `llms-install.md` gains a dedicated Cline section.
 - Claude Desktop install instructions rewritten end-to-end. Confirmed via live testing:

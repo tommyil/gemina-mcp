@@ -28,7 +28,7 @@
 | Auth header | `X-API-Key: <your-api-key>` *(or)* `Authorization: Bearer <your-api-key>` |
 | Free tier | 1,500 calls/month |
 | Rate limit | ~10 calls/second per API key |
-| File types | PDF, PNG, JPEG, GIF, WebP — up to 50 MB |
+| File types | PDF, PNG, JPEG, GIF, WebP, HEIC, AVIF — up to 50 MB |
 
 ## 3. Tools exposed
 
@@ -279,7 +279,7 @@ The same API key works for both MCP and REST.
 - **401 / auth errors** — Confirm the key is pasted without quotes inside the value, and that the header name is exactly `X-API-Key` (case-insensitive) or `Authorization: Bearer <key>`.
 - **Client can't connect to MCP** — Verify your client supports **Streamable HTTP** transport (not stdio). The endpoint URL must end with a trailing slash: `/api/v1/mcp/`.
 - **Out of credits** — The free tier resets monthly. Upgrade at https://www.gemina.co/pricing or wait for reset.
-- **File too large / unsupported type** — Limit is 50 MB. Supported: PDF, PNG, JPEG, GIF, WebP.
+- **File too large / unsupported type** — Limit is 50 MB. Supported: PDF, PNG, JPEG, GIF, WebP, HEIC, AVIF.
 
 ## 9. Get help
 
