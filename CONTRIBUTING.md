@@ -42,3 +42,22 @@ This project follows the [Contributor Covenant](./CODE_OF_CONDUCT.md). Be kind. 
 
 - Issues: https://github.com/tommyil/gemina-mcp/issues
 - Email: info@gemina.co
+
+## Publishing to the MCP Registry (maintainers)
+
+The registry entry is `server.json`. The `co.gemina/*` namespace is proven by an
+Ed25519 key whose public half is in a DNS TXT record on the `gemina.co` apex.
+The private key lives **outside git** at `key.pem` (gitignored) and is backed up
+in Google Secret Manager (`mcp-registry-ed25519`, project `gemina-production`).
+
+1. Edit `server.json`: bump `version`, keep `description` ≤ 100 characters,
+   keep every `api/v1/mcp` URL with its trailing slash.
+2. `python -m json.tool server.json > /dev/null`
+3. `mcp-publisher login dns --domain gemina.co --private-key "$(openssl pkey -in key.pem -outform DER | tail -c 32 | xxd -p -c 64)"`
+4. `mcp-publisher publish` (run from the repo root, where `server.json` lives)
+5. Verify: `curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=co.gemina" | jq '.servers[].server | {name,version}'`
+6. Commit the bumped `server.json`, tag `vX.Y.Z`, and create a GitHub Release.
+
+Notes: the registry rejects non-standard fields and silently strips
+`documentationUrl`; a `name` change publishes a *new* server (there is no
+rename), so keep the old entry pointing at the new one.
