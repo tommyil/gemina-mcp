@@ -1,6 +1,6 @@
 # curl-quickstart
 
-**Goal:** make your first successful FileTag call in under three minutes, no MCP client needed.
+**Goal:** make your first successful Gemina call (FileTag, free tier) in under three minutes, no MCP client needed.
 
 ## Prerequisites
 

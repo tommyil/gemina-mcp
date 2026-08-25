@@ -1,6 +1,6 @@
 # Contributing to gemina-mcp
 
-Thanks for the interest. This repo is the install, discovery, and examples surface for Gemina FileTag — not the server code itself. That shapes what PRs we accept.
+Thanks for the interest. This repo is the install, discovery, and examples surface for Gemina's MCP server — not the server code itself. That shapes what PRs we accept.
 
 ## What we welcome
 
@@ -51,7 +51,7 @@ The private key lives **outside git** at `key.pem` (gitignored) and is backed up
 in Google Secret Manager (`mcp-registry-ed25519`, project `gemina-production`).
 
 1. Edit `server.json`: bump `version`, keep `description` ≤ 100 characters,
-   keep every `api/v1/mcp` URL with its trailing slash.
+   keep every `/api/v1/mcp/` URL with its trailing slash.
 2. `python -m json.tool server.json > /dev/null`
 3. `mcp-publisher login dns --domain gemina.co --private-key "$(openssl pkey -in key.pem -outform DER | tail -c 32 | xxd -p -c 64)"`
 4. `mcp-publisher publish` (run from the repo root, where `server.json` lives)

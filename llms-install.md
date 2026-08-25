@@ -1,8 +1,8 @@
-# Install Gemina FileTag (MCP)
+# Install Gemina (MCP)
 
-> Machine-readable install guide for AI agents. Connect Gemina FileTag to any MCP-compatible client — tag, rename, and enrich any PDF or image in one call. Free tier: 1,500 tags/month, no credit card.
+> Machine-readable install guide for AI agents. Connect Gemina to any MCP-compatible client — tag, rename, and enrich any PDF or image (FileTag, free tier), run Core-OCR extraction, and search your indexed documents. Free tier: 1,500 FileTag tags/month, no credit card.
 
-**Canonical location:** This file is the single source of truth for installing the Gemina FileTag MCP server. The website's `/llms.txt` points here. Agents should ingest the raw markdown at:
+**Canonical location:** This file is the single source of truth for installing the Gemina MCP server. The website's `/llms.txt` points here. Agents should ingest the raw markdown at:
 
 `https://raw.githubusercontent.com/tommyil/gemina-mcp/main/llms-install.md`
 
@@ -26,15 +26,42 @@
 | MCP URL | `https://api.gemina.co/api/v1/mcp/` |
 | Transport | Streamable HTTP |
 | Auth header | `X-API-Key: <your-api-key>` *(or)* `Authorization: Bearer <your-api-key>` |
-| Free tier | 1,500 calls/month |
+| Free tier | 1,500 FileTag tags/month (extraction and document intelligence are paid — see https://www.gemina.co/pricing) |
 | Rate limit | ~10 calls/second per API key |
 | File types | PDF, PNG, JPEG, GIF, WebP, HEIC, AVIF — up to 50 MB |
 
 ## 3. Tools exposed
 
-- **`files_create_upload`** — Reserve a pre-signed upload slot. Returns `file_id` and a PUT URL to upload the document bytes to.
+One server, 13 tools in three groups, plus 2 prompts. Anonymous discovery (`tools/list`, `prompts/list`) is served at `https://api.gemina.co/api/v1/mcp/public/`.
+
+**FileTag (free tier)**
+
+- **`files_create_upload`** — Reserve a pre-signed upload slot. Returns `file_id`, a PUT URL, and the headers to echo on the PUT (slot expires in 5 minutes).
 - **`tag_file`** — Tag a previously-uploaded file by `file_id`. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL.
-- **`tag_url`** — Fetch and tag a publicly-accessible HTTPS URL directly. Same response shape as `tag_file`.
+- **`tag_url`** — Fetch and tag a publicly-accessible HTTPS URL server-side (no private IPs, no redirects, 50 MB cap). Same response shape as `tag_file`.
+
+**Extraction (Core-OCR, paid)**
+
+- **`files_create_extraction_upload`** — Reserve a pre-signed upload slot for extraction (distinct from the FileTag slot). Follow the returned `next_tool_call` into `extract_document`.
+- **`extract_document`** — Run extraction on an uploaded slot with one or more `extraction_types`: `ocr`, `invoice_headers`, `invoice_line_items`, `document_details_hebrew`, `document_line_items_hebrew`, or `custom_template`.
+- **`get_extraction_result`** — Poll an asynchronous extraction by `meta.correlationId`; returns the result or `IN_PROCESS`.
+- **`list_extractions`** — List past extractions, newest first; filter by `external_id`, `end_user_id`, or date window; paginate with `skip`/`limit`.
+- **`get_extraction`** — Fetch one extraction by id, including the full extracted data.
+- **`get_document`** — Fetch one document by id, including all of its extractions.
+- **`submit_extraction_feedback`** — Submit verified/corrected field values for a completed extraction (`label:<human label>|ptr:/<json pointer>` keys); returns a per-field comparison summary.
+
+**Document Intelligence (paid)**
+
+- **`query_documents`** — Search the indexed document collection: `structured` (exact field filters), `semantic` (natural-language similarity), or `hybrid` (keyword + semantic, best default).
+- **`aggregate_documents`** — Sums/averages/min/max/counts over indexed documents, optionally grouped (vendor, currency, document type, month, ...) and filtered like `query_documents`.
+- **`index_document`** — (Re)index one document into the searchable index — after corrections, or to backfill documents processed before indexing was enabled.
+
+**Prompts**
+
+- **`explain_filename_patterns`** — The six filename patterns FileTag returns and how to choose between them.
+- **`explain_upload_flow`** — The three-step upload flow: `files_create_upload` → PUT → `tag_file`.
+
+All tools are listed for every key; the extraction and document-intelligence groups require a paid plan — see https://www.gemina.co/pricing.
 
 ## 4. Client-specific install snippets
 

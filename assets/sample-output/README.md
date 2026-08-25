@@ -1,6 +1,6 @@
-# Sample FileTag responses
+# Sample Gemina FileTag responses
 
-Real FileTag JSON responses for the documents in [`../sample-input/`](../sample-input). Use these to:
+Real Gemina FileTag JSON responses for the documents in [`../sample-input/`](../sample-input). Use these to:
 
 - Preview the response shape without spending free-tier credits.
 - Test example code against known good fixtures.

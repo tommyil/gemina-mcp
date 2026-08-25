@@ -1,5 +1,5 @@
 name: Integration help
-description: You're trying to install FileTag MCP in a client and something's not working.
+description: You're trying to install the Gemina MCP server in a client and something's not working.
 title: "[help] Install in <client name>"
 labels: ["help wanted", "integration"]
 body:

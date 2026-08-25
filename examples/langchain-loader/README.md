@@ -1,10 +1,10 @@
 # langchain-loader
 
-A LangChain `BaseLoader` that enriches each loaded document with Gemina FileTag metadata. The LangChain equivalent of [llamaindex-reader](../llamaindex-reader).
+A LangChain `BaseLoader` that enriches each loaded document with Gemina's FileTag metadata. The LangChain equivalent of [llamaindex-reader](../llamaindex-reader).
 
-## Why FileTag at ingestion time?
+## Why tag at ingestion time?
 
-Same argument as the LlamaIndex example: filtering retrieval by structured metadata (vendor, date, document type) is orders of magnitude more accurate than asking the LLM to figure it out from raw chunks. FileTag is the cheapest way to get that metadata at ingestion.
+Same argument as the LlamaIndex example: filtering retrieval by structured metadata (vendor, date, document type) is orders of magnitude more accurate than asking the LLM to figure it out from raw chunks. Gemina's free-tier FileTag tools are the cheapest way to get that metadata at ingestion.
 
 ## Setup
 
@@ -34,7 +34,7 @@ documents = loader.load()
 db = Chroma.from_documents(documents, OpenAIEmbeddings())
 ```
 
-Each `Document.metadata` carries the FileTag structured fields, so you can run filtered retrieval:
+Each `Document.metadata` carries the structured fields Gemina returns, so you can run filtered retrieval:
 
 ```python
 results = db.similarity_search(

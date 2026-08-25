@@ -1,12 +1,12 @@
 # bulk-tag-folder
 
-Walk a local directory, tag every supported file with Gemina FileTag, and write the results to disk. Handy for filing a backlog of receipts, invoices, contracts, or scans.
+Walk a local directory, tag every supported file with Gemina's FileTag tools, and write the results to disk. Handy for filing a backlog of receipts, invoices, contracts, or scans.
 
 ## What it does
 
 For every PDF/PNG/JPEG/GIF/WebP/HEIC/AVIF in the input directory (recursive):
 
-1. Uploads to FileTag's REST endpoint.
+1. Uploads to Gemina's FileTag REST endpoint.
 2. Writes the JSON response to `output/<original-filename>.json`.
 3. Downloads the enriched copy (PDF metadata or EXIF embedded; HEIC/AVIF copies are returned renamed but without embedded metadata) under the API's suggested filename into `output/enriched/`.
 4. Prints a one-line summary per file.
@@ -39,7 +39,7 @@ python bulk_tag.py /path/to/your/documents --dry-run
 
 ```
 output/
-├── invoice_2024_acme.pdf.json        ← FileTag response
+├── invoice_2024_acme.pdf.json        ← Gemina FileTag response
 ├── invoice_2024_acme.pdf.error.txt   ← (only if the call failed)
 └── enriched/
     └── 2024-03-15_Acme-Corp_Invoice.pdf   ← downloaded enriched copy
@@ -47,7 +47,7 @@ output/
 
 ## Rate limits
 
-The free tier allows ~10 calls per second and 1,500 calls per month. `bulk_tag.py` paces requests at ~5/sec by default to leave headroom — adjust with `--rate-limit`.
+The free tier allows ~10 calls per second and 1,500 FileTag tags per month. `bulk_tag.py` paces requests at ~5/sec by default to leave headroom — adjust with `--rate-limit`.
 
 ## What's next
 

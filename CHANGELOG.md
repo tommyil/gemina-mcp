@@ -1,8 +1,15 @@
 # Changelog
 
-All notable changes to this repository — and to the Gemina FileTag MCP server's public contract — will be documented here. We follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format and [Semantic Versioning](https://semver.org/spec/v2.0.0.html) for the server's response shape.
+All notable changes to this repository — and to the Gemina MCP server's public contract — will be documented here. We follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format and [Semantic Versioning](https://semver.org/spec/v2.0.0.html) for the server's response shape.
 
 ## [Unreleased]
+
+### Changed
+- **Rebrand: the server is "Gemina" (FileTag = free tier).** All prose now names the product "Gemina" — one unified MCP server whose free tier is FileTag (`tag_file`/`tag_url`) and whose paid tiers add extraction and document intelligence. Tool names, the `/api/v1/filetag` REST path, the `GeminaFileTagReader`/`GeminaFileTagLoader` classes, the `filetag_document_id` metadata key, and the `FileTag/*` Gmail labels are user-facing contracts and are unchanged. Commit 2f19d3d already renamed the config identifier to `gemina` for this reason.
+- Documented the full tool surface: 13 tools across three groups (FileTag, Extraction, Document Intelligence) plus 2 prompts, in README, `llms-install.md`, and the Claude Desktop walkthrough. Previously only the three FileTag tools were listed.
+- The "1,500/month" claim is now scoped to the free tier's FileTag tags rather than the server as a whole. Paid pricing lives at https://www.gemina.co/pricing.
+- Removed `assets/filetag-og.png` (byte-identical duplicate of `assets/social-preview.png`, unreferenced).
+- CI (`validate.yml`): new guard fails on any `/api/v1/mcp/` URL missing its trailing slash; JSON-snippet validation now covers README.md code blocks as well as `llms-install.md`.
 
 ### Added
 - HEIC, HEIF, and AVIF input support (`image/heic`, `image/heif`, `image/avif`; extensions `.heic`, `.heif`, `.hif`, `.avif`). Advertised in `glama.json` `supportedFileTypes`, README, `llms-install.md`, and all example scripts. Enriched copies of HEIC/AVIF inputs are returned renamed but without embedded metadata.
@@ -46,8 +53,9 @@ All notable changes to this repository — and to the Gemina FileTag MCP server'
 
 ## Server contract — release history
 
-The Gemina FileTag MCP server is a hosted service; only server-side changes that affect clients or break backward compatibility are recorded here.
+The Gemina MCP server is a hosted service; only server-side changes that affect clients or break backward compatibility are recorded here.
 
+- **2026-08** — Tool surface expanded from 3 to 13 tools (+ 2 prompts) on the same endpoint. Added Extraction: `files_create_extraction_upload`, `extract_document`, `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `submit_extraction_feedback`; Document Intelligence: `query_documents`, `aggregate_documents`, `index_document`. Prompts: `explain_filename_patterns`, `explain_upload_flow`. FileTag tools and auth unchanged.
 - **2026-05** — Public launch. Endpoint: `https://api.gemina.co/api/v1/mcp/`. Tools: `files_create_upload`, `tag_file`, `tag_url`. Auth: `X-API-Key` or `Authorization: Bearer`. Free tier: 1,500 calls/month.
 
 [Unreleased]: https://github.com/tommyil/gemina-mcp/compare/v1.0.2...HEAD

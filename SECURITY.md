@@ -16,8 +16,8 @@ We aim to respond within **two business days** with an acknowledgement and an in
 
 This policy covers:
 
-- The Gemina FileTag MCP server at `https://api.gemina.co/api/v1/mcp/`.
-- The Gemina FileTag REST API at `https://api.gemina.co/api/v1/filetag` and adjacent endpoints.
+- The Gemina MCP server at `https://api.gemina.co/api/v1/mcp/`.
+- The Gemina REST API (FileTag and Core-OCR) at `https://api.gemina.co/api/v1/filetag` and adjacent endpoints.
 - The example code in this repository (Python, shell, configuration files).
 - Authentication flows for API keys issued via `https://console.gemina.co`.
 

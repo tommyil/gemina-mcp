@@ -41,5 +41,5 @@ The script overwrites the existing PDFs in place.
 ## Notes for maintainers
 
 - Keep everything in this directory **non-confidential** — synthetic only. No real vendor names, no PII.
-- The corresponding FileTag JSON responses (when refreshed) live in [`../sample-output/`](../sample-output).
+- The corresponding Gemina FileTag JSON responses (when refreshed) live in [`../sample-output/`](../sample-output).
 - Don't add huge files here. Keep each PDF under ~50 KB so cloning the repo stays fast.

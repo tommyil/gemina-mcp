@@ -1,9 +1,9 @@
 <div align="center">
   <img src="assets/logo/logo.svg" alt="Gemina" width="120" />
 
-# Gemina FileTag — MCP server
+# Gemina — MCP server
 
-**Tag, rename, and enrich any PDF or image. One MCP call. Free tier: 1,500 tags/month, no credit card.**
+**Tag, extract, and search your documents from any MCP client. Free tier: 1,500 FileTag tags/month, no credit card.**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Free tier](https://img.shields.io/badge/free%20tier-1%2C500%20tags%2Fmonth-brightgreen.svg)](https://www.gemina.co/filetag)
@@ -18,7 +18,9 @@
 
 ## What is this?
 
-This repository is the **discovery, install, and examples surface** for Gemina FileTag's MCP server. The server itself is hosted at `https://api.gemina.co/api/v1/mcp/` — there is no daemon to run locally. Point your MCP-compatible client at the endpoint, paste an API key, and tag your first document in under a minute.
+This repository is the **discovery, install, and examples surface** for Gemina's MCP server. The server itself is hosted at `https://api.gemina.co/api/v1/mcp/` — there is no daemon to run locally. Point your MCP-compatible client at the endpoint, paste an API key, and tag your first document in under a minute.
+
+One server, three tool groups: **FileTag** (free tier — tag, rename, and enrich any PDF or image), **Extraction** (Core-OCR: invoice headers, line items, full text, custom templates), and **Document Intelligence** (search and aggregate over your indexed documents). See [Tools](#tools) for the full list.
 
 The server itself is closed-source (operated by Gemina). Everything in this repo — install snippets, examples, integration code — is MIT-licensed and contributions are welcome.
 
@@ -257,13 +259,49 @@ For the full machine-readable install guide (used by agents), see [`llms-install
 
 ## Free tier
 
-**1,500 tags per month. No credit card required.** Sign up at [gemina.co/filetag](https://www.gemina.co/filetag), grab an API key, paste it into your config. The same key works for both MCP and the REST API.
+**Free tier: 1,500 FileTag tags per month. No credit card required.** Sign up at [gemina.co/filetag](https://www.gemina.co/filetag), grab an API key, paste it into your config. The same key works for both MCP and the REST API.
 
-Need more? Paid plans add larger monthly allowances, configurable data residency, and longer retention. See [pricing](https://www.gemina.co/pricing).
+Need more? Paid plans add larger monthly allowances, the extraction and document-intelligence tools, configurable data residency, and longer retention. See [pricing](https://www.gemina.co/pricing).
+
+## Tools
+
+One endpoint, 13 tools in three groups, plus 2 prompts. Every tool is listed for every key; the extraction and document-intelligence groups require a paid plan (see [pricing](https://www.gemina.co/pricing)). Anonymous discovery (`tools/list`, `prompts/list`) is available at `https://api.gemina.co/api/v1/mcp/public/`.
+
+**FileTag (free tier)**
+
+| Tool | What it does |
+|---|---|
+| `files_create_upload` | Reserve a pre-signed PUT slot for a file you'll tag. Returns `file_id`, the upload URL, and the headers to echo on the PUT. |
+| `tag_file` | Run the FileTag pipeline on an uploaded slot: metadata, six filename patterns, and a short-lived enriched-file URL. |
+| `tag_url` | Fetch a public HTTPS URL server-side and tag it — the bytes never pass through the model context. |
+
+**Extraction (Core-OCR)**
+
+| Tool | What it does |
+|---|---|
+| `files_create_extraction_upload` | Reserve a pre-signed PUT slot for extraction (distinct from the FileTag slot). |
+| `extract_document` | Run one or more extraction types on an uploaded slot: `ocr`, `invoice_headers`, `invoice_line_items`, `document_details_hebrew`, `document_line_items_hebrew`, `custom_template`. |
+| `get_extraction_result` | Poll an asynchronous extraction by `meta.correlationId`. |
+| `list_extractions` | List past extractions, newest first, with filters and pagination. |
+| `get_extraction` | Fetch one extraction by id, including the full extracted data. |
+| `get_document` | Fetch one document by id, including all of its extractions. |
+| `submit_extraction_feedback` | Send verified/corrected field values back — the extraction-quality feedback loop. |
+
+**Document Intelligence**
+
+| Tool | What it does |
+|---|---|
+| `query_documents` | Search your indexed documents: `structured` filters, `semantic` similarity, or `hybrid` (best default). |
+| `aggregate_documents` | Sums/averages/min/max/counts over indexed documents, grouped by vendor, currency, type, month, and more. |
+| `index_document` | (Re)index one document into the searchable index — after corrections or to backfill. |
+
+**Prompts:** `explain_filename_patterns` (the six filename patterns and when to use each) · `explain_upload_flow` (`files_create_upload` → PUT → `tag_file`).
+
+The full reference for each group is in [`llms-install.md`](./llms-install.md#3-tools-exposed).
 
 ## Use cases
 
-The same MCP call (`tag_file` or `tag_url`) powers all of these. Each example has a dedicated walkthrough in [`examples/`](./examples).
+The same FileTag tools (`tag_file` or `tag_url`) power all of these. Each example has a dedicated walkthrough in [`examples/`](./examples).
 
 | Use case | What it does | Example |
 |---|---|---|
@@ -274,17 +312,17 @@ The same MCP call (`tag_file` or `tag_url`) powers all of these. Each example ha
 | ⚡ **Quickstart (curl)** | First tag in three minutes, no MCP client needed | [`examples/curl-quickstart`](./examples/curl-quickstart) |
 | 🖥️ **Claude Desktop walkthrough** | Step-by-step setup with screenshots | [`examples/claude-desktop`](./examples/claude-desktop) |
 
-## Why FileTag, not a raw LLM call?
+## Why Gemina, not a raw LLM call?
 
 A naive "ask GPT to tag this PDF" pipeline breaks in production: hallucinated vendor names, inconsistent date formats, no structured output, no PDF metadata embedding, no enriched-file roundtrip. FileTag is the harness around that call — specialized agents that **reason, cross-check, and refuse to guess** — wrapped in a single endpoint with a stable JSON contract.
 
-| | Raw LLM | Gemina FileTag |
+| | Raw LLM | Gemina |
 |---|---|---|
 | Structured output | Free text, requires parsing | Stable JSON schema |
 | Filename suggestions | None | Six patterns, ready to use |
 | PDF metadata embedding | DIY | Returned as downloadable enriched copy |
 | Hallucinations | Frequent | Cross-checked, refuses when unsure |
-| Per-document cost | $$ per call | Free for first 1,500/month |
+| Per-document cost | $$ per call | Free tier: first 1,500 FileTag tags/month |
 
 ## Privacy & trust
 
@@ -322,4 +360,4 @@ Examples PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md). The server it
 
 The contents of this repository — install snippets, example code, documentation, configuration files, and sample assets — are released under the [MIT License](./LICENSE).
 
-The Gemina FileTag MCP server itself is a hosted closed-source service operated by Gemina (https://gemina.co) and is **not** covered by this license. Use of the server is governed by [Gemina's Terms of Service](https://www.gemina.co/terms-of-service) and [Privacy Policy](https://www.gemina.co/privacy-policy).
+The Gemina MCP server itself is a hosted closed-source service operated by Gemina (https://gemina.co) and is **not** covered by this license. Use of the server is governed by [Gemina's Terms of Service](https://www.gemina.co/terms-of-service) and [Privacy Policy](https://www.gemina.co/privacy-policy).
