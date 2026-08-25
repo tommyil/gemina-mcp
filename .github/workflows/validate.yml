@@ -24,9 +24,13 @@ jobs:
         # server redirects and most MCP clients drop the POST body. `mc[p]` keeps
         # this step's own pattern from matching itself. `/api/v1/mcp/public/`
         # (the anonymous discovery endpoint) is a different, valid URL and passes.
+        # The RFC 9728 / 8414 discovery URLs (`/.well-known/oauth-protected-resource/`
+        # and `/.well-known/oauth-authorization-server/` followed by the resource
+        # path) carry that path without a slash by design and are exempt below.
         run: |
           set -o pipefail
-          hits=$(grep -rnE 'api/v1/mc[p]([^/]|$)' --include='*.md' --include='*.json' --include='*.yml' --include='*.py' --exclude-dir=.git . || true)
+          hits=$(grep -rnE 'api/v1/mc[p]([^/]|$)' --include='*.md' --include='*.json' --include='*.yml' --include='*.py' --exclude-dir=.git . \
+            | grep -vE '\.well-known/oauth-(protected-resource|authorization-server)/api/v1/mc[p]' || true)
           if [ -n "$hits" ]; then
             echo "MCP endpoint URL(s) missing the trailing slash (expected /api/v1/mcp/):" >&2
             echo "$hits" >&2

@@ -18,7 +18,7 @@
 
 ## What is this?
 
-This repository is the **discovery, install, and examples surface** for Gemina's MCP server. The server itself is hosted at `https://api.gemina.co/api/v1/mcp/` — there is no daemon to run locally. Point your MCP-compatible client at the endpoint, paste an API key, and tag your first document in under a minute.
+This repository is the **discovery, install, and examples surface** for Gemina's MCP server. The server itself is hosted at `https://api.gemina.co/api/v1/mcp/` — there is no daemon to run locally. Point your MCP-compatible client at the endpoint, sign in with your Gemina account (or paste an API key for headless use), and tag your first document in under a minute.
 
 One server, three tool groups: **FileTag** (free tier — tag, rename, and enrich any PDF or image), **Extraction** (Core-OCR: invoice headers, line items, full text, custom templates), and **Document Intelligence** (search and aggregate over your indexed documents). See [Tools](#tools) for the full list.
 
@@ -68,14 +68,41 @@ Three uses out of one response — pick the one your code needs, ignore the rest
 
 ## Quick install
 
-You need an API key. Get one free (no credit card) at **https://console.gemina.co/registration/create-account**, then drop the snippet below into your MCP client's config and restart it.
+**Sign in with your Gemina account** — no API key to copy. Every snippet below points your client at the endpoint; the client discovers Gemina's authorization server and opens a browser sign-in. Don't have an account? Create one free (no credit card) at **https://console.gemina.co/registration/create-account**.
 
-**Endpoint:** `https://api.gemina.co/api/v1/mcp/` · **Transport:** Streamable HTTP · **Auth:** `X-API-Key` header
+Running headless (CI, servers, scripts, or a client that doesn't prompt to sign in)? Use the **API-key form** shown under each client instead.
+
+**Endpoint:** `https://api.gemina.co/api/v1/mcp/` · **Transport:** Streamable HTTP · **Auth:** OAuth 2.1 sign-in (default) *or* `X-API-Key` header (headless)
 
 <details>
-<summary><b>Claude Desktop</b></summary>
+<summary><b>How OAuth sign-in works</b> (click to expand)</summary>
 
-Claude Desktop's Custom Connectors UI (**Customize → Connectors**) only supports OAuth and doesn't accept custom headers — it can't authenticate against Gemina's `X-API-Key`. Use the `mcp-remote` stdio bridge instead.
+- Clients discover the authorization server from the MCP URL via RFC 9728 (protected-resource metadata) and RFC 8414 (authorization-server metadata):
+  - `https://api.gemina.co/.well-known/oauth-protected-resource/api/v1/mcp`
+  - `https://api.gemina.co/.well-known/oauth-authorization-server/api/v1/mcp`
+- Dynamic Client Registration (DCR) and Client ID Metadata Documents (CIMD) are both supported — no pre-registration, no client ID/secret to paste.
+- Scope: `mcp`. Access tokens last 1 hour; refresh tokens rotate and last 30 days.
+- Each connected app gets its own API key named `<app> (OAuth)`. See and revoke them under **Console → API Keys → Connected apps** at https://console.gemina.co.
+
+</details>
+
+<details>
+<summary><b>Claude Desktop / claude.ai</b></summary>
+
+**Recommended: OAuth via Connectors.** claude.ai and Claude Desktop use the same flow — no config file, no `mcp-remote`, no API key. Gemina creates a key for the app when you approve it.
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. Settings → Connectors
+2. Add custom connector
+3. Paste the URL
+4. Sign in
+```
+
+Sign in with your Gemina account when prompted and approve the consent page. The Gemina tools appear in new chats immediately.
+
+**Fallback: API key via `mcp-remote`.** Claude Desktop's Connectors UI doesn't accept custom headers, so an API key has to go through the `mcp-remote` stdio bridge. Use this only if you need a specific key (headless or shared machines).
 
 **Prerequisites**
 
@@ -127,9 +154,46 @@ Save → fully quit Claude Desktop (Cmd+Q / right-click tray → Quit) → relau
 </details>
 
 <details>
+<summary><b>Claude Code (CLI)</b></summary>
+
+**OAuth (default):** register the server, then run `/mcp` and sign in — Claude Code opens the Gemina sign-in in your browser.
+
+```bash
+claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/
+# then run /mcp and sign in
+```
+
+Inside Claude Code: `/mcp` → select **gemina** → **Authenticate** → sign in with your Gemina account in the browser → approve the consent page.
+
+**API key (headless):**
+
+```bash
+claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/ \
+  --header "X-API-Key: <paste-your-key-here>"
+```
+
+</details>
+
+<details>
 <summary><b>Cursor</b></summary>
 
 File: `~/.cursor/mcp.json`.
+
+**OAuth (default):**
+
+```json
+{
+  "mcpServers": {
+    "gemina": {
+      "url": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+OAuth support varies by client version — if your client does not prompt to sign in, use the API-key form below.
+
+**API key (headless):**
 
 ```json
 {
@@ -147,19 +211,26 @@ File: `~/.cursor/mcp.json`.
 </details>
 
 <details>
-<summary><b>Claude Code (CLI)</b></summary>
-
-```bash
-claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/ \
-  --header "X-API-Key: <paste-your-key-here>"
-```
-
-</details>
-
-<details>
 <summary><b>VS Code</b></summary>
 
 File: `.vscode/mcp.json` (per workspace).
+
+**OAuth (default):**
+
+```json
+{
+  "servers": {
+    "gemina": {
+      "type": "http",
+      "url": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+OAuth support varies by client version — if your client does not prompt to sign in, use the API-key form below.
+
+**API key (headless):**
 
 ```json
 {
@@ -182,6 +253,23 @@ File: `.vscode/mcp.json` (per workspace).
 
 In Cline's MCP settings (gear icon → MCP Servers → Edit Config), add:
 
+**OAuth (default):**
+
+```json
+{
+  "mcpServers": {
+    "gemina": {
+      "type": "streamableHttp",
+      "url": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+OAuth support varies by client version — if your client does not prompt to sign in, use the API-key form below.
+
+**API key (headless):**
+
 ```json
 {
   "mcpServers": {
@@ -203,6 +291,22 @@ In Cline's MCP settings (gear icon → MCP Servers → Edit Config), add:
 
 File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not `url`.
 
+**OAuth (default):**
+
+```json
+{
+  "mcpServers": {
+    "gemina": {
+      "serverUrl": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+OAuth support varies by client version — if your client does not prompt to sign in, use the API-key form below.
+
+**API key (headless):**
+
 ```json
 {
   "mcpServers": {
@@ -223,6 +327,17 @@ File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not
 
 Append to `~/.codex/config.toml`:
 
+**OAuth (default):**
+
+```toml
+[mcp_servers.gemina]
+url = "https://api.gemina.co/api/v1/mcp/"
+```
+
+OAuth support varies by client version — if your client does not prompt to sign in, use the API-key form below.
+
+**API key (headless):**
+
 ```toml
 [mcp_servers.gemina]
 url = "https://api.gemina.co/api/v1/mcp/"
@@ -234,6 +349,16 @@ http_headers = { "X-API-Key" = "<paste-your-key-here>" }
 <details>
 <summary><b>OpenClaw</b></summary>
 
+**OAuth (default):**
+
+```bash
+openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http"}'
+```
+
+OAuth support varies by client version — if your client does not prompt to sign in, use the API-key form below.
+
+**API key (headless):**
+
 ```bash
 openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http","headers":{"X-API-Key":"<paste-your-key-here>"}}'
 ```
@@ -244,6 +369,18 @@ openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":
 <summary><b>Hermes-Agent</b></summary>
 
 Append under `mcp_servers` in `~/.hermes/config.yaml`:
+
+**OAuth (default):**
+
+```yaml
+mcp_servers:
+  gemina:
+    url: "https://api.gemina.co/api/v1/mcp/"
+```
+
+OAuth support varies by client version — if your client does not prompt to sign in, use the API-key form below.
+
+**API key (headless):**
 
 ```yaml
 mcp_servers:
@@ -259,7 +396,7 @@ For the full machine-readable install guide (used by agents), see [`llms-install
 
 ## Free tier
 
-**Free tier: 1,500 FileTag tags per month. No credit card required.** Sign up at [gemina.co/filetag](https://www.gemina.co/filetag), grab an API key, paste it into your config. The same key works for both MCP and the REST API.
+**Free tier: 1,500 FileTag tags per month. No credit card required.** Sign up at [gemina.co/filetag](https://www.gemina.co/filetag), then sign in from your MCP client — or grab an API key for headless use. The same key works for both MCP and the REST API.
 
 Need more? Paid plans add larger monthly allowances, the extraction and document-intelligence tools, configurable data residency, and longer retention. See [pricing](https://www.gemina.co/pricing).
 
@@ -350,7 +487,7 @@ Full details on the [Gemina Trust Center](https://www.gemina.co/trust-center).
 
 ## For aggregators and directory listings
 
-The `Dockerfile` at the repo root is **not for end users.** It exists so directory operators (e.g. Glama's `/mcp/servers/` tier) can build a container that introspects the public tool surface without provisioning credentials. The container runs [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) against `https://api.gemina.co/api/v1/mcp/public/` — a read-only discovery endpoint that serves `initialize` / `tools/list` / `prompts/list` to anonymous callers but refuses `tools/call`. End users should follow the **Quick install** section above and connect to the authenticated endpoint with their personal API key.
+The `Dockerfile` at the repo root is **not for end users.** It exists so directory operators (e.g. Glama's `/mcp/servers/` tier) can build a container that introspects the public tool surface without provisioning credentials. The container runs [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) against `https://api.gemina.co/api/v1/mcp/public/` — a read-only discovery endpoint that serves `initialize` / `tools/list` / `prompts/list` to anonymous callers but refuses `tools/call`. End users should follow the **Quick install** section above and connect to the authenticated endpoint by signing in (or with their personal API key).
 
 ## Contributing
 

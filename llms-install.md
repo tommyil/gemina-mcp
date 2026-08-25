@@ -17,7 +17,9 @@
 ## 1. Prerequisites
 
 - An MCP-compatible client that speaks **Streamable HTTP** (Claude Desktop, Cursor, Claude Code, VS Code, Cline, Codex CLI, Windsurf, OpenClaw, Hermes-Agent, MCP Inspector — or any other client supporting the spec).
-- A Gemina API key. Get one free (no credit card) at: https://console.gemina.co/registration/create-account
+- A Gemina account. Create one free (no credit card) at: https://console.gemina.co/registration/create-account
+- **Default auth is OAuth sign-in** — the client discovers the authorization server from the MCP URL and the user signs in from the app. No key to paste.
+- **Headless (CI, servers, scripts, or a client that doesn't prompt to sign in):** an API key from the console, sent as a header.
 
 ## 2. Endpoint
 
@@ -25,9 +27,12 @@
 |---|---|
 | MCP URL | `https://api.gemina.co/api/v1/mcp/` |
 | Transport | Streamable HTTP |
-| Auth header | `X-API-Key: <your-api-key>` *(or)* `Authorization: Bearer <your-api-key>` |
+| Auth (default) | OAuth 2.1 sign-in — discovery via RFC 9728 / RFC 8414; Dynamic Client Registration (DCR) and Client ID Metadata Documents (CIMD) both accepted; scope `mcp`; access tokens 1 h, rotating refresh tokens 30 d |
+| OAuth discovery | `https://api.gemina.co/.well-known/oauth-protected-resource/api/v1/mcp` and `https://api.gemina.co/.well-known/oauth-authorization-server/api/v1/mcp` |
+| Connected apps | Each OAuth-connected app gets its own API key named `<app> (OAuth)`; list and revoke under Console → API Keys → Connected apps (https://console.gemina.co) |
+| Auth header (headless) | `X-API-Key: <your-api-key>` *(or)* `Authorization: Bearer <your-api-key>` |
 | Free tier | 1,500 FileTag tags/month (extraction and document intelligence are paid — see https://www.gemina.co/pricing) |
-| Rate limit | ~10 calls/second per API key |
+| Rate limit | ~10 calls/second per API key (OAuth-connected apps count against their own key) |
 | File types | PDF, PNG, JPEG, GIF, WebP, HEIC, AVIF — up to 50 MB |
 
 ## 3. Tools exposed
@@ -65,11 +70,24 @@ All tools are listed for every key; the extraction and document-intelligence gro
 
 ## 4. Client-specific install snippets
 
-Each snippet uses the `X-API-Key` header variant. Replace `<paste-your-key-here>` with your actual API key. `Authorization: Bearer <key>` works equivalently if your client prefers bearer tokens.
+Each client has two forms. **OAuth (default):** no header — the client discovers Gemina's authorization server from the MCP URL and prompts the user to sign in. **API key (headless):** the `X-API-Key` header variant; replace `<paste-your-key-here>` with the actual API key. `Authorization: Bearer <key>` works equivalently if the client prefers bearer tokens. OAuth support varies by client version — if the client does not prompt to sign in, use the API-key form.
 
-### Claude Desktop
+### Claude Desktop / claude.ai
 
-Claude Desktop's `claude_desktop_config.json` does not support remote HTTP MCP servers directly — the file schema is stdio-only. The Custom Connectors UI (**Customize → Connectors**) is OAuth-only and cannot supply the `X-API-Key` header, so it doesn't work for Gemina either. The supported path is the `mcp-remote` stdio bridge.
+**OAuth (default):** claude.ai and Claude Desktop use the same Connectors flow — no config file, no `mcp-remote`, no API key. Gemina creates a key for the app when the user approves it.
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. Settings → Connectors
+2. Add custom connector
+3. Paste the URL
+4. Sign in
+```
+
+Sign in with the Gemina account when prompted and approve the consent page. Tools appear in new chats immediately.
+
+**API key (fallback):** Claude Desktop's `claude_desktop_config.json` does not support remote HTTP MCP servers directly — the file schema is stdio-only — and the Connectors UI cannot supply an `X-API-Key` header. To use a specific API key, go through the `mcp-remote` stdio bridge.
 
 **Prerequisites**
 
@@ -106,9 +124,41 @@ File: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) 
 - Env-var indirection keeps the literal API key out of `args` (where it would otherwise show in process listings).
 - Windows + `spawn npx ENOENT`: replace `"command": "npx"` with the absolute path from `where npx` (forward slashes work in JSON, e.g. `"C:/Program Files/nodejs/npx.cmd"`).
 
+### Claude Code
+
+**OAuth (default):** register, then run `/mcp` and sign in — Claude Code opens the Gemina sign-in in the browser.
+
+```bash
+claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/
+# then run /mcp and sign in
+```
+
+In Claude Code: `/mcp` → select **gemina** → **Authenticate** → browser sign-in → approve consent.
+
+**API key (headless):**
+
+```bash
+claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/ \
+  --header "X-API-Key: <paste-your-key-here>"
+```
+
 ### Cursor
 
 File: `~/.cursor/mcp.json`. Cursor accepts remote Streamable HTTP servers directly.
+
+**OAuth (default):**
+
+```json
+{
+  "mcpServers": {
+    "gemina": {
+      "url": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+**API key (headless):**
 
 ```json
 {
@@ -123,18 +173,24 @@ File: `~/.cursor/mcp.json`. Cursor accepts remote Streamable HTTP servers direct
 }
 ```
 
-### Claude Code
-
-One-line CLI registration:
-
-```bash
-claude mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/ \
-  --header "X-API-Key: <paste-your-key-here>"
-```
-
 ### VS Code
 
 File: `.vscode/mcp.json` per workspace.
+
+**OAuth (default):**
+
+```json
+{
+  "servers": {
+    "gemina": {
+      "type": "http",
+      "url": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+**API key (headless):**
 
 ```json
 {
@@ -154,6 +210,21 @@ File: `.vscode/mcp.json` per workspace.
 
 In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` field is required for Cline to recognize a remote Streamable HTTP server:
 
+**OAuth (default):**
+
+```json
+{
+  "mcpServers": {
+    "gemina": {
+      "type": "streamableHttp",
+      "url": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+**API key (headless):**
+
 ```json
 {
   "mcpServers": {
@@ -172,6 +243,15 @@ In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` 
 
 Append to `~/.codex/config.toml`:
 
+**OAuth (default):**
+
+```toml
+[mcp_servers.gemina]
+url = "https://api.gemina.co/api/v1/mcp/"
+```
+
+**API key (headless):**
+
 ```toml
 [mcp_servers.gemina]
 url = "https://api.gemina.co/api/v1/mcp/"
@@ -181,6 +261,20 @@ http_headers = { "X-API-Key" = "<paste-your-key-here>" }
 ### Windsurf
 
 File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not `url`.
+
+**OAuth (default):**
+
+```json
+{
+  "mcpServers": {
+    "gemina": {
+      "serverUrl": "https://api.gemina.co/api/v1/mcp/"
+    }
+  }
+}
+```
+
+**API key (headless):**
 
 ```json
 {
@@ -197,6 +291,14 @@ File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not
 
 ### OpenClaw
 
+**OAuth (default):**
+
+```bash
+openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http"}'
+```
+
+**API key (headless):**
+
 ```bash
 openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http","headers":{"X-API-Key":"<paste-your-key-here>"}}'
 ```
@@ -204,6 +306,16 @@ openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":
 ### Hermes-Agent
 
 Append under `mcp_servers` in `~/.hermes/config.yaml`:
+
+**OAuth (default):**
+
+```yaml
+mcp_servers:
+  gemina:
+    url: "https://api.gemina.co/api/v1/mcp/"
+```
+
+**API key (headless):**
 
 ```yaml
 mcp_servers:
@@ -214,6 +326,19 @@ mcp_servers:
 ```
 
 ### MCP Inspector (debugging)
+
+**OAuth:**
+
+```bash
+npx @modelcontextprotocol/inspector
+
+# Then in the Inspector UI:
+#   Transport: Streamable HTTP
+#   URL:       https://api.gemina.co/api/v1/mcp/
+#   Auth:      Open Auth Settings → Quick OAuth Flow, then sign in
+```
+
+**API key:**
 
 ```bash
 npx @modelcontextprotocol/inspector
@@ -226,7 +351,7 @@ npx @modelcontextprotocol/inspector
 
 ## 5. Verify the install
 
-Smoke-test the endpoint directly with curl — a valid response confirms the API key, the network path, and the MCP server are all working:
+Smoke-test the endpoint directly with curl. curl has no browser to sign in with, so this uses an API key — a valid response confirms the key, the network path, and the MCP server are all working. (OAuth clients discover the authorization server at `https://api.gemina.co/.well-known/oauth-authorization-server/api/v1/mcp`.)
 
 ```bash
 curl -X POST https://api.gemina.co/api/v1/mcp/ \
@@ -303,7 +428,11 @@ The same API key works for both MCP and REST.
 
 ## 8. Troubleshooting
 
-- **401 / auth errors** — Confirm the key is pasted without quotes inside the value, and that the header name is exactly `X-API-Key` (case-insensitive) or `Authorization: Bearer <key>`.
+- **401 / auth errors (API key)** — Confirm the key is pasted without quotes inside the value, and that the header name is exactly `X-API-Key` (case-insensitive) or `Authorization: Bearer <key>`.
+- **OAuth: "Dynamic Client Registration rejected" / registration failed** — Make sure the URL ends with the trailing slash (`/api/v1/mcp/`) and update the client to a version that supports MCP OAuth (DCR or CIMD).
+- **OAuth: token expired / calls start failing with 401 after a while** — Access tokens last 1 hour and refresh tokens 30 days; if the refresh lapsed, re-authenticate (Claude Code: `/mcp` → gemina → Authenticate; other clients: reconnect the server).
+- **OAuth: key revoked** — If the app's key was revoked under Console → API Keys → Connected apps, reconnect the server from the app to get a new one.
+- **OAuth: consent page says the request expired** — Start the sign-in again from the app (not by reloading the consent page).
 - **Client can't connect to MCP** — Verify your client supports **Streamable HTTP** transport (not stdio). The endpoint URL must end with a trailing slash: `/api/v1/mcp/`.
 - **Out of credits** — The free tier resets monthly. Upgrade at https://www.gemina.co/pricing or wait for reset.
 - **File too large / unsupported type** — Limit is 50 MB. Supported: PDF, PNG, JPEG, GIF, WebP, HEIC, AVIF.
@@ -312,4 +441,4 @@ The same API key works for both MCP and REST.
 
 - Email: info@gemina.co
 - Docs: https://www.gemina.co/docs/filetag
-- Console (manage API keys, billing, usage): https://console.gemina.co
+- Console (manage API keys, connected apps, billing, usage): https://console.gemina.co
