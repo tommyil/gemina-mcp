@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional
 
 import requests
 from llama_index.core import Document
@@ -31,7 +30,7 @@ class GeminaFileTagReader(BaseReader):
         filename, filetag_document_id.
     """
 
-    def __init__(self, api_key: Optional[str] = None, timeout: float = 120.0) -> None:
+    def __init__(self, api_key: str | None = None, timeout: float = 120.0) -> None:
         super().__init__()
         self.api_key = api_key or os.environ.get("GEMINA_API_KEY")
         if not self.api_key:
@@ -54,7 +53,7 @@ class GeminaFileTagReader(BaseReader):
                 docs.append(doc)
         return docs
 
-    def _load_one(self, path: Path) -> Optional[Document]:
+    def _load_one(self, path: Path) -> Document | None:
         with path.open("rb") as f:
             response = requests.post(
                 TAG_ENDPOINT,
