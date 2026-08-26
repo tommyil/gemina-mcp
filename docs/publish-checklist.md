@@ -19,7 +19,7 @@ for u in \
   https://www.gemina.co/assets/gemina-logo.png \
   https://www.gemina.co/product/agents \
   https://www.gemina.co/docs/mcp \
-  https://www.gemina.co/privacy \
+  https://www.gemina.co/privacy-policy \
   https://www.gemina.co/assets/filetag-logo.png \
   https://api.gemina.co/.well-known/oauth-protected-resource/api/v1/mcp \
   https://api.gemina.co/.well-known/oauth-authorization-server/api/v1/mcp ; do
