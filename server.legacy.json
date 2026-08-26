@@ -1,12 +1,12 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "co.gemina/gemina",
-  "title": "Gemina",
-  "description": "Invoice OCR, document extraction, search and free FileTag tagging for AI agents. OAuth or API key.",
-  "version": "2.0.0",
+  "name": "co.gemina/filetag",
+  "title": "Gemina FileTag",
+  "description": "Superseded by co.gemina/gemina — same server, new name. Install co.gemina/gemina.",
+  "version": "1.0.3",
   "icons": [
     {
-      "src": "https://www.gemina.co/assets/gemina-logo.png",
+      "src": "https://www.gemina.co/assets/filetag-logo.png",
       "sizes": ["400x400"],
       "mimeType": "image/png"
     }

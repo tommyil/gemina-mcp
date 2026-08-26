@@ -3,11 +3,11 @@
   "maintainers": [
     "tommyil"
   ],
-  "name": "Gemina FileTag",
-  "description": "Tag, rename, and enrich any PDF or image. One MCP call. Free tier: 1,500 tags/month, no credit card.",
-  "homepage": "https://www.gemina.co/filetag",
+  "name": "Gemina",
+  "description": "Invoice OCR, document extraction, document search/aggregation, and free FileTag tagging for AI agents. One remote Streamable HTTP endpoint, 13 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key.",
+  "homepage": "https://www.gemina.co/product/agents",
   "repository": "https://github.com/tommyil/gemina-mcp",
-  "documentation": "https://www.gemina.co/docs/filetag",
+  "documentation": "https://www.gemina.co/docs/mcp",
   "license": "Proprietary (server) / MIT (examples)",
   "vendor": {
     "name": "Gemina",
@@ -16,27 +16,127 @@
   },
   "transport": "streamable-http",
   "endpoint": "https://api.gemina.co/api/v1/mcp/",
+  "discoveryEndpoint": "https://api.gemina.co/api/v1/mcp/public/",
   "auth": {
     "type": "header",
     "header": "X-API-Key",
     "alternateHeader": "Authorization: Bearer <api-key>",
+    "oauth": {
+      "supported": true,
+      "version": "2.1",
+      "dynamicClientRegistration": true,
+      "clientIdMetadataDocuments": true,
+      "resourceMetadata": "https://api.gemina.co/.well-known/oauth-protected-resource/api/v1/mcp",
+      "authorizationServerMetadata": "https://api.gemina.co/.well-known/oauth-authorization-server/api/v1/mcp"
+    },
     "signup": "https://console.gemina.co/registration/create-account",
-    "note": "Same key works for both MCP and REST. Either auth method is accepted."
+    "apiKeys": "https://console.gemina.co/api-keys",
+    "note": "Two ways in. (1) OAuth 2.1: connect with no headers and the client discovers the authorization server via RFC 9728/8414 and opens a browser sign-in (Claude Code /mcp, claude.ai / Claude Desktop connectors, Cursor, VS Code). (2) API key: send X-API-Key (or Authorization: Bearer) for headless use. The same key works for MCP and REST. Anonymous tools/list and prompts/list are served at the discoveryEndpoint."
   },
   "tools": [
     {
       "name": "files_create_upload",
-      "description": "Reserve a pre-signed upload slot. Returns file_id and a PUT URL to upload the document bytes to."
+      "group": "FileTag",
+      "tier": "free",
+      "description": "Reserve a pre-signed PUT slot for a file you'll tag. Returns file_id, the upload URL, and the headers to echo on the PUT."
     },
     {
       "name": "tag_file",
-      "description": "Tag a previously-uploaded file by file_id. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL."
+      "group": "FileTag",
+      "tier": "free",
+      "description": "Run the FileTag pipeline on an uploaded slot: metadata, six filename patterns, and a short-lived enriched-file URL."
     },
     {
       "name": "tag_url",
-      "description": "Fetch and tag a publicly-accessible HTTPS URL directly. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL."
+      "group": "FileTag",
+      "tier": "free",
+      "description": "Fetch a public HTTPS URL server-side and tag it. The bytes never pass through the model context."
+    },
+    {
+      "name": "files_create_extraction_upload",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "Reserve a pre-signed PUT slot for extraction (distinct from the FileTag slot)."
+    },
+    {
+      "name": "extract_document",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "Run one or more extraction types on an uploaded slot: ocr, invoice_headers, invoice_line_items, document_details_hebrew, document_line_items_hebrew, custom_template."
+    },
+    {
+      "name": "get_extraction_result",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "Poll an asynchronous extraction by meta.correlationId."
+    },
+    {
+      "name": "list_extractions",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "List past extractions, newest first, with filters and pagination."
+    },
+    {
+      "name": "get_extraction",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "Fetch one extraction by id, including the full extracted data."
+    },
+    {
+      "name": "get_document",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "Fetch one document by id, including all of its extractions."
+    },
+    {
+      "name": "submit_extraction_feedback",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "Send verified/corrected field values back: the extraction-quality feedback loop."
+    },
+    {
+      "name": "query_documents",
+      "group": "Document Intelligence",
+      "tier": "paid",
+      "description": "Search your indexed documents: structured filters, semantic similarity, or hybrid (best default)."
+    },
+    {
+      "name": "aggregate_documents",
+      "group": "Document Intelligence",
+      "tier": "paid",
+      "description": "Sums/averages/min/max/counts over indexed documents, grouped by vendor, currency, type, month, and more."
+    },
+    {
+      "name": "index_document",
+      "group": "Document Intelligence",
+      "tier": "paid",
+      "description": "(Re)index one document into the searchable index, after corrections or to backfill."
     }
   ],
+  "prompts": [
+    {
+      "name": "explain_filename_patterns",
+      "description": "The six filename patterns and when to use each."
+    },
+    {
+      "name": "explain_upload_flow",
+      "description": "files_create_upload -> PUT -> tag_file."
+    }
+  ],
+  "toolGroups": {
+    "FileTag": {
+      "tier": "free",
+      "tools": ["files_create_upload", "tag_file", "tag_url"]
+    },
+    "Extraction": {
+      "tier": "paid",
+      "tools": ["files_create_extraction_upload", "extract_document", "get_extraction_result", "list_extractions", "get_extraction", "get_document", "submit_extraction_feedback"]
+    },
+    "Document Intelligence": {
+      "tier": "paid",
+      "tools": ["query_documents", "aggregate_documents", "index_document"]
+    }
+  },
   "supportedFileTypes": [
     "application/pdf",
     "image/png",
@@ -50,18 +150,23 @@
   "maxFileSize": "50MB",
   "rateLimits": {
     "burst": "~10 calls/second per API key",
-    "monthly": "1,500 free tier; larger on paid plans"
+    "monthly": "1,500 FileTag tags on the free tier; larger allowances and the paid tool groups on paid plans"
   },
   "pricing": {
     "freeTier": {
       "calls": 1500,
       "period": "month",
-      "creditCardRequired": false
+      "creditCardRequired": false,
+      "scope": "FileTag tools only (tag_file, tag_url)"
     },
     "details": "https://www.gemina.co/pricing"
   },
   "keywords": [
     "document-ai",
+    "invoice-ocr",
+    "document-extraction",
+    "document-search",
+    "oauth",
     "pdf",
     "metadata",
     "tagging",

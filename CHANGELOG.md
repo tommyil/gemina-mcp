@@ -4,6 +4,8 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-08-xx
+
 ### Changed
 - **OAuth 2.1 sign-in (DCR + CIMD) is the default; API key remains supported.** README, `llms-install.md`, the Claude Desktop walkthrough, and the integration-help issue template now lead with the OAuth form of every client snippet (no headers — the client discovers the authorization server via RFC 9728/8414 and prompts a browser sign-in) and keep the `X-API-Key` snippet as the headless lane. Claude Desktop / claude.ai install through **Settings → Connectors → Add custom connector** with no `mcp-remote`; the bridge stays documented as the API-key fallback. Reverses the 2026-05 'Connectors UI cannot be used' guidance (33ff119). Each connected app gets its own key, `<app> (OAuth)`, under Console → API Keys → Connected apps.
 - CI (`validate.yml`): the trailing-slash guard now exempts the RFC 9728/8414 discovery URLs (`/.well-known/oauth-protected-resource/api/v1/mcp` and `/.well-known/oauth-authorization-server/api/v1/mcp`), whose resource path legitimately has no trailing slash.
@@ -14,6 +16,7 @@ All notable changes to this repository — and to the Gemina MCP server's public
 - CI (`validate.yml`): new guard fails on any `/api/v1/mcp/` URL missing its trailing slash; JSON-snippet validation now covers README.md code blocks as well as `llms-install.md`.
 
 ### Added
+- Registry manifests for the rename: `server.json` is now `co.gemina/gemina` 2.0.0 (OAuth-first, `X-API-Key` optional); `server.legacy.json` republishes `co.gemina/filetag` as 1.0.3 pointing at the new name. `glama.json` lists all 13 tools grouped free/paid plus OAuth metadata. `docs/publish-checklist.md` and `docs/outreach/` hold the publish-day runbook and directory drafts.
 - HEIC, HEIF, and AVIF input support (`image/heic`, `image/heif`, `image/avif`; extensions `.heic`, `.heif`, `.hif`, `.avif`). Advertised in `glama.json` `supportedFileTypes`, README, `llms-install.md`, and all example scripts. Enriched copies of HEIC/AVIF inputs are returned renamed but without embedded metadata.
 
 ### Fixed
@@ -60,7 +63,8 @@ The Gemina MCP server is a hosted service; only server-side changes that affect 
 - **2026-08** — Tool surface expanded from 3 to 13 tools (+ 2 prompts) on the same endpoint. Added Extraction: `files_create_extraction_upload`, `extract_document`, `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `submit_extraction_feedback`; Document Intelligence: `query_documents`, `aggregate_documents`, `index_document`. Prompts: `explain_filename_patterns`, `explain_upload_flow`. FileTag tools and auth unchanged.
 - **2026-05** — Public launch. Endpoint: `https://api.gemina.co/api/v1/mcp/`. Tools: `files_create_upload`, `tag_file`, `tag_url`. Auth: `X-API-Key` or `Authorization: Bearer`. Free tier: 1,500 calls/month.
 
-[Unreleased]: https://github.com/tommyil/gemina-mcp/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/tommyil/gemina-mcp/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/tommyil/gemina-mcp/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/tommyil/gemina-mcp/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/tommyil/gemina-mcp/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/tommyil/gemina-mcp/releases/tag/v1.0.0
