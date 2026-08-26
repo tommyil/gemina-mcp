@@ -18,7 +18,7 @@ https://claude.com/docs/connectors/building/review-criteria (fetched
 
 | Requirement | Status | Action |
 |---|---|---|
-| Privacy policy URL, HTTPS, covering collection, usage/storage, third-party sharing, retention, contact. "Missing or incomplete privacy policies result in immediate rejection." | ✗ https://www.gemina.co/privacy-policy returned **404** | Ship the website branch page, re-curl for 200. |
+| Privacy policy URL, HTTPS, covering collection, usage/storage, third-party sharing, retention, contact. "Missing or incomplete privacy policies result in immediate rejection." | ✓ https://www.gemina.co/privacy-policy returns 200 (verified 2026-08-26) | Confirm it covers collection/retention/contact before submitting. |
 | Every tool must have `title` and `readOnlyHint: true` (read-only) or `destructiveHint: true` (writes/deletes). The portal auto-flags missing ones and blocks. | ✗ `tools/list` on `/api/v1/mcp/public/` shows **no `title` and no `annotations` on any of the 13 tools** | Add annotations server-side (api-v2 MCP tool definitions). Suggested: read-only = `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `query_documents`, `aggregate_documents`; write = `files_create_upload`, `files_create_extraction_upload`, `tag_file`, `tag_url`, `extract_document`, `submit_extraction_feedback`, `index_document` (none destructive; use `destructiveHint: false`, `idempotentHint` where true). |
 | OAuth 2.0 for authenticated services | ✓ on staging; ✗ prod 401 lacks `WWW-Authenticate` and discovery URLs 404 | Deploy OAuth to prod (see `docs/publish-checklist.md` step 0). |
 | Public documentation live by publish date | ✗ https://www.gemina.co/docs/mcp 404 | Website branch. |
