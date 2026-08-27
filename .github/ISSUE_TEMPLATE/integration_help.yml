@@ -32,7 +32,9 @@ body:
     id: config
     attributes:
       label: Your config (redact the API key, if any)
-      description: Paste the exact JSON/YAML/TOML you have in your client's config file. On the OAuth path there are no headers — that's expected.
+      description: |
+        Paste the exact JSON/YAML/TOML you have in your client's config file, or the command you ran. On the OAuth path there are no headers — that's expected.
+        Three clients need an explicit second step and are the most common cause of a "connected but every tool fails" report: Codex CLI (`codex mcp login`), OpenClaw (`auth: "oauth"` plus `openclaw mcp login`) and Hermes-Agent (`auth: oauth` plus `hermes mcp login`). Cline has no OAuth path for remote servers — use an API key.
       render: json
       placeholder: |
         {

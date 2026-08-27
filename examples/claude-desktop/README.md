@@ -17,8 +17,8 @@ claude.ai and Claude Desktop use the same Connectors flow — no config file, no
 ```text
 URL: https://api.gemina.co/api/v1/mcp/
 
-1. Settings → Connectors
-2. Add custom connector
+1. Customize → Connectors
+2. Add → Add custom connector
 3. Paste the URL
 4. Sign in
 ```

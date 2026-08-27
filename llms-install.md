@@ -70,7 +70,7 @@ All tools are listed for every key; the extraction and document-intelligence gro
 
 ## 4. Client-specific install snippets
 
-Each client has two forms. **OAuth (default):** no header — the client discovers Gemina's authorization server from the MCP URL and prompts the user to sign in. **API key (headless):** the `X-API-Key` header variant; replace `<paste-your-key-here>` with the actual API key. `Authorization: Bearer <key>` works equivalently if the client prefers bearer tokens. OAuth support varies by client version — if the client does not prompt to sign in, use the API-key form.
+Each client has two forms. **OAuth (default):** no header — the client discovers Gemina's authorization server from the MCP URL and prompts the user to sign in. **API key (headless):** the `X-API-Key` header variant; replace `<paste-your-key-here>` with the actual API key. `Authorization: Bearer <key>` works equivalently if the client prefers bearer tokens. Most clients need nothing beyond the URL. Three need an explicit second step (Codex CLI, OpenClaw and Hermes-Agent — see their sections), and Cline has no documented OAuth path for remote servers as of 2026-08-27.
 
 ### Claude Desktop / claude.ai
 
@@ -79,8 +79,8 @@ Each client has two forms. **OAuth (default):** no header — the client discove
 ```text
 URL: https://api.gemina.co/api/v1/mcp/
 
-1. Settings → Connectors
-2. Add custom connector
+1. Customize → Connectors
+2. Add → Add custom connector
 3. Paste the URL
 4. Sign in
 ```
@@ -208,20 +208,9 @@ File: `.vscode/mcp.json` per workspace.
 
 ### Cline
 
-In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` field is required for Cline to recognize a remote Streamable HTTP server:
+In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` field is required for Cline to recognize a remote Streamable HTTP server; omitting it falls back to the legacy `sse` transport.
 
-**OAuth (default):**
-
-```json
-{
-  "mcpServers": {
-    "gemina": {
-      "type": "streamableHttp",
-      "url": "https://api.gemina.co/api/v1/mcp/"
-    }
-  }
-}
-```
+**Cline is API-key only.** As of 2026-08-27 Cline has no documented OAuth path for remote MCP servers — its MCP docs never mention OAuth, and the one release note that does (v4.1.7) names the legacy SSE transport, not `streamableHttp`.
 
 **API key (headless):**
 
@@ -241,14 +230,16 @@ In Cline's MCP settings (gear icon → MCP Servers → Edit Config). The `type` 
 
 ### Codex CLI
 
-Append to `~/.codex/config.toml`:
-
 **OAuth (default):**
 
-```toml
-[mcp_servers.gemina]
-url = "https://api.gemina.co/api/v1/mcp/"
+```bash
+codex mcp add gemina --url https://api.gemina.co/api/v1/mcp/
+codex mcp login gemina
 ```
+
+`codex mcp add` detects OAuth on the URL and usually starts the browser sign-in by itself; `codex mcp login` is the documented guarantee. Do **not** paste a bare `[mcp_servers.gemina]` block for OAuth — Codex will connect to the server *unauthenticated* and every tool call fails. Verified against codex-cli 0.150.1 on 2026-08-27.
+
+For the API-key lane, append to `~/.codex/config.toml`:
 
 **API key (headless):**
 
@@ -294,8 +285,11 @@ File: `~/.codeium/windsurf/mcp_config.json`. Note: the field is `serverUrl`, not
 **OAuth (default):**
 
 ```bash
-openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http"}'
+openclaw mcp set gemina '{"url":"https://api.gemina.co/api/v1/mcp/","transport":"streamable-http","auth":"oauth"}'
+openclaw mcp login gemina
 ```
+
+Both lines are required. `mcp set` stores the server with `auth: "oauth"`; `mcp login` runs the flow — OpenClaw does not start OAuth off a 401 on its own. Headless: `openclaw mcp login gemina --code <code>`. Check with `openclaw mcp doctor gemina --probe`.
 
 **API key (headless):**
 
@@ -313,7 +307,10 @@ Append under `mcp_servers` in `~/.hermes/config.yaml`:
 mcp_servers:
   gemina:
     url: "https://api.gemina.co/api/v1/mcp/"
+    auth: oauth
 ```
+
+Then run `hermes mcp login gemina` from a **fresh** terminal, not inside a live session — the in-session config reload times out at 30s, too short for a browser sign-in. The `auth: oauth` line is what turns OAuth on; Hermes never infers it from a 401.
 
 **API key (headless):**
 
@@ -327,26 +324,27 @@ mcp_servers:
 
 ### MCP Inspector (debugging)
 
+Inspector v2 takes the server on the command line — the v1 "Auth Settings → Quick OAuth Flow" UI no longer exists. Needs Node 22.19+.
+
 **OAuth:**
 
 ```bash
-npx @modelcontextprotocol/inspector
+npx @modelcontextprotocol/inspector \
+  --server-url https://api.gemina.co/api/v1/mcp/ \
+  --transport http
 
-# Then in the Inspector UI:
-#   Transport: Streamable HTTP
-#   URL:       https://api.gemina.co/api/v1/mcp/
-#   Auth:      Open Auth Settings → Quick OAuth Flow, then sign in
+# Open the printed URL (it carries a one-time session token), then click Connect.
+# Gemina answers 401, the Inspector discovers the authorization server,
+# registers itself and opens your browser to sign in.
 ```
 
 **API key:**
 
 ```bash
-npx @modelcontextprotocol/inspector
-
-# Then in the Inspector UI:
-#   Transport: Streamable HTTP
-#   URL:       https://api.gemina.co/api/v1/mcp/
-#   Header:    X-API-Key: <paste-your-key-here>
+npx @modelcontextprotocol/inspector \
+  --server-url https://api.gemina.co/api/v1/mcp/ \
+  --transport http \
+  --header "X-API-Key: <paste-your-key-here>"
 ```
 
 ## 5. Verify the install
