@@ -6,8 +6,8 @@
   "version": "2.0.0",
   "icons": [
     {
-      "src": "https://www.gemina.co/assets/gemina-logo.png",
-      "sizes": ["400x400"],
+      "src": "https://console.gemina.co/android-chrome-512x512.png",
+      "sizes": ["512x512"],
       "mimeType": "image/png"
     }
   ],
@@ -16,7 +16,7 @@
     "source": "github"
   },
   "websiteUrl": "https://www.gemina.co/product/agents",
-  "documentationUrl": "https://www.gemina.co/docs/mcp",
+  "documentationUrl": "https://github.com/tommyil/gemina-mcp#readme",
   "remotes": [
     {
       "type": "streamable-http",

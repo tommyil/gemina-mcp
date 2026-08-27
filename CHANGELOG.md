@@ -4,7 +4,7 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
-## [2.0.0] - 2026-08-xx
+## [2.0.0] - 2026-08-27
 
 ### Changed
 - **OAuth 2.1 sign-in (DCR + CIMD) is the default; API key remains supported.** README, `llms-install.md`, the Claude Desktop walkthrough, and the integration-help issue template now lead with the OAuth form of every client snippet (no headers — the client discovers the authorization server via RFC 9728/8414 and prompts a browser sign-in) and keep the `X-API-Key` snippet as the headless lane. Claude Desktop / claude.ai install through **Settings → Connectors → Add custom connector** with no `mcp-remote`; the bridge stays documented as the API-key fallback. Reverses the 2026-05 'Connectors UI cannot be used' guidance (33ff119). Each connected app gets its own key, `<app> (OAuth)`, under Console → API Keys → Connected apps.

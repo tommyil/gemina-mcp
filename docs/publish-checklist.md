@@ -11,6 +11,13 @@ root (gitignored; backup in GSM `mcp-registry-ed25519`, project
 
 ## 0. Pre-flight: everything the manifests point at must be live
 
+> **2.0.0 (2026-08-27):** the website branch had not shipped, so the manifests
+> point at LIVE stand-ins: icon `https://console.gemina.co/android-chrome-512x512.png`
+> (512x512) instead of `www.gemina.co/assets/gemina-logo.png`, and
+> `documentationUrl` = the repo README instead of `www.gemina.co/docs/mcp`.
+> Publish **2.0.1** with the website URLs once Phase 5 is live (bump
+> `version` in `server.json`, re-run §1-§3).
+
 The manifests reference URLs that ship with the website branch and the API
 OAuth deploy. As of 2026-08-26 the items marked ✗ were **not** live on prod.
 

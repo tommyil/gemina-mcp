@@ -7,7 +7,7 @@
   "description": "Invoice OCR, document extraction, document search/aggregation, and free FileTag tagging for AI agents. One remote Streamable HTTP endpoint, 13 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key.",
   "homepage": "https://www.gemina.co/product/agents",
   "repository": "https://github.com/tommyil/gemina-mcp",
-  "documentation": "https://www.gemina.co/docs/mcp",
+  "documentation": "https://github.com/tommyil/gemina-mcp#readme",
   "license": "Proprietary (server) / MIT (examples)",
   "vendor": {
     "name": "Gemina",

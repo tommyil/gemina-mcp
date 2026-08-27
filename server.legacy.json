@@ -7,7 +7,7 @@
   "icons": [
     {
       "src": "https://www.gemina.co/assets/filetag-logo.png",
-      "sizes": ["400x400"],
+      "sizes": ["512x512"],
       "mimeType": "image/png"
     }
   ],
@@ -16,7 +16,7 @@
     "source": "github"
   },
   "websiteUrl": "https://www.gemina.co/product/agents",
-  "documentationUrl": "https://www.gemina.co/docs/mcp",
+  "documentationUrl": "https://github.com/tommyil/gemina-mcp#readme",
   "remotes": [
     {
       "type": "streamable-http",
