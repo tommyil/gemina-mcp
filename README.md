@@ -383,6 +383,192 @@ mcp_servers:
 
 </details>
 
+<details>
+<summary><b>Grok</b></summary>
+
+xAI's coding agent. Install with `curl -fsSL https://x.ai/cli/install.sh | bash`. OAuth triggers a browser flow on first use; tokens cache in `~/.grok/mcp_credentials.json`. On grok.com instead: **Connectors → New Connector → Custom**, paste the URL.
+
+**OAuth (default):**
+
+```bash
+grok mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/
+```
+
+**API key (headless):**
+
+```bash
+grok mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/ \
+  --header "X-API-Key: <paste-your-key-here>"
+```
+
+</details>
+
+<details>
+<summary><b>Gemini CLI</b></summary>
+
+Google's terminal agent. Add `-s user` to install Gemina for every project. Nothing to configure for OAuth — the default `dynamic_discovery` provider registers itself off the 401 and opens your browser; tokens cache in `~/.gemini/mcp-oauth-tokens.json`. Re-run the sign-in with `/mcp auth gemina`.
+
+**OAuth (default):**
+
+```bash
+gemini mcp add --transport http gemina https://api.gemina.co/api/v1/mcp/
+```
+
+**API key (headless):**
+
+```bash
+gemini mcp add --transport http \
+  --header "X-API-Key: <paste-your-key-here>" \
+  gemina https://api.gemina.co/api/v1/mcp/
+```
+
+</details>
+
+<details>
+<summary><b>n8n</b></summary>
+
+Workflow automation, cloud or self-hosted. Use the **MCP Client Tool** node under an AI Agent, or **MCP Client** for a plain workflow step. For OAuth, create an *MCP OAuth2 API* credential and leave Dynamic Client Registration on with Resource URL empty — n8n registers itself with Gemina. Needs MCP Client Tool node v1.2 or later.
+
+**OAuth (default):**
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. Add the MCP Client Tool node (under an AI Agent), or MCP Client for a plain step
+2. MCP Endpoint URL: paste the URL above
+3. Server Transport: HTTP Streamable
+4. Authentication: MCP OAuth2
+5. Credentials -> create an "MCP OAuth2 API" credential; leave Dynamic Client
+   Registration on and Resource URL empty
+6. Click sign in, approve Gemina in the browser, then set Tools to Include
+```
+
+**API key (headless):**
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. Add the MCP Client Tool node (under an AI Agent), or MCP Client for a plain step
+2. MCP Endpoint URL: paste the URL above
+3. Server Transport: HTTP Streamable
+4. Authentication: Header Auth -> Name: X-API-Key, Value: <paste-your-key-here>
+5. Set Tools to Include (All, or a subset)
+```
+
+</details>
+
+<details>
+<summary><b>Copilot Studio</b></summary>
+
+Microsoft's agent builder — a browser wizard, no config file. *Dynamic discovery* is the right lane: Gemina publishes DCR and the discovery documents, so no client ID, secret or endpoint URL has to be typed. Copilot Studio supports the Streamable transport only. MCP access flows through Power Platform connectors, so tenant DLP policies apply.
+
+**OAuth (default):**
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. In your agent: Tools -> Add a tool -> New tool -> Model Context Protocol
+2. Server name: Gemina
+3. Server URL: paste the URL above
+4. Authentication: OAuth 2.0 -> Type: Dynamic discovery
+5. Create -> Create a new connection -> Add to agent
+```
+
+**API key (headless):**
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. In your agent: Tools -> Add a tool -> New tool -> Model Context Protocol
+2. Server name: Gemina
+3. Server URL: paste the URL above
+4. Authentication: API key -> Type: Header -> Name: X-API-Key
+5. Create -> Create a new connection (paste <paste-your-key-here>) -> Add to agent
+```
+
+</details>
+
+<details>
+<summary><b>Zapier</b></summary>
+
+Connects Gemina's tools to 8,000+ apps through the **MCP Client** app (Beta). A connection form, not a config file.
+
+> **Bearer only.** Zapier has no custom-header field, so the key goes in the *Bearer Token* box — Gemina accepts it as `Authorization: Bearer`. There is no `X-API-Key` lane here.
+
+**OAuth (default):**
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. Apps -> + Add connection -> MCP Client -> Add connection
+2. Server URL: paste the URL above
+3. Transport: Streamable HTTP
+4. OAuth: Yes (leave Bearer Token blank)
+5. Continue, then sign in to Gemina in the tab that opens
+```
+
+**API key (headless):**
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. Apps -> + Add connection -> MCP Client -> Add connection
+2. Server URL: paste the URL above
+3. Transport: Streamable HTTP
+4. OAuth: No
+5. Bearer Token: <paste-your-key-here>
+```
+
+</details>
+
+<details>
+<summary><b>ChatGPT</b></summary>
+
+Add Gemina as a custom MCP app in ChatGPT on the web. Needs Developer mode and a Pro, Plus, Business, Enterprise or Edu account.
+
+> **OAuth only.** ChatGPT cannot send a custom header or an API key to a remote MCP server, so there is no headless lane here — sign in instead, or use Codex CLI if you need a specific key.
+
+**Setup steps:**
+
+```text
+URL: https://api.gemina.co/api/v1/mcp/
+
+1. Settings -> Security and login -> turn on Developer mode
+2. Go to chatgpt.com/plugins and select +
+3. Name it "Gemina" and paste the URL above under Connection
+4. Create, then sign in to Gemina when ChatGPT prompts
+```
+
+</details>
+
+<details>
+<summary><b>OpenAI Responses API</b></summary>
+
+For embedding Gemina in your own product: one tool entry turns the whole Gemina surface into an OpenAI-side capability.
+
+> **API key only.** This is a server-side lane with no browser, so there is no OAuth sign-in to run — the API forwards a credential you already hold.
+
+**API key:**
+
+```bash
+curl https://api.openai.com/v1/responses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d '{
+    "model": "gpt-5.6",
+    "input": "Extract the totals from the invoice I uploaded.",
+    "tools": [{
+      "type": "mcp",
+      "server_label": "gemina",
+      "server_url": "https://api.gemina.co/api/v1/mcp/",
+      "headers": { "X-API-Key": "<paste-your-key-here>" },
+      "require_approval": "never"
+    }]
+  }'
+```
+
+</details>
+
 For the full machine-readable install guide (used by agents), see [`llms-install.md`](./llms-install.md).
 
 ## Free tier
