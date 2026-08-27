@@ -20,8 +20,11 @@ jobs:
         run: python -m json.tool < glama.json > /dev/null
 
       - name: Guard against MCP endpoint URLs missing the trailing slash
-        # The MCP endpoint is `/api/v1/mcp/` — without the trailing slash the
-        # server redirects and most MCP clients drop the POST body. `mc[p]` keeps
+        # The MCP endpoint is `/api/v1/mcp/`. Always publish the trailing-slash
+        # form: it is the canonical endpoint and is never wrong. (Measured on prod
+        # 2026-08-27, the slashless form does not 307 — both answer 401 — so the
+        # docs must not claim it breaks; clients derive the slashless `resource`
+        # themselves during discovery.) `mc[p]` keeps
         # this step's own pattern from matching itself. `/api/v1/mcp/public/`
         # (the anonymous discovery endpoint) is a different, valid URL and passes.
         # The RFC 9728 / 8414 discovery URLs (`/.well-known/oauth-protected-resource/`
