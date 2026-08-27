@@ -7,8 +7,8 @@ document_type, amount, etc.) so retrieval can filter by metadata.
 from __future__ import annotations
 
 import os
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator, Optional
 
 import requests
 from langchain_core.document_loaders import BaseLoader
@@ -30,7 +30,7 @@ class GeminaFileTagLoader(BaseLoader):
     def __init__(
         self,
         directory: str | Path,
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         timeout: float = 120.0,
     ) -> None:
         self.directory = Path(directory)

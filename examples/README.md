@@ -1,6 +1,6 @@
 # Examples
 
-Runnable recipes for the Gemina FileTag MCP server. Each subdirectory is independent — clone the repo, `cd` into one, follow its README.
+Runnable recipes for the Gemina MCP server. Each subdirectory is independent — clone the repo, `cd` into one, follow its README.
 
 | Directory | What it shows | Stack |
 |---|---|---|
@@ -8,12 +8,12 @@ Runnable recipes for the Gemina FileTag MCP server. Each subdirectory is indepen
 | [`claude-desktop`](./claude-desktop) | Step-by-step setup in Claude Desktop | None (config-only walkthrough) |
 | [`bulk-tag-folder`](./bulk-tag-folder) | Walk a directory and tag every file | Python + `requests` |
 | [`gmail-attachment-triage`](./gmail-attachment-triage) | Pull Gmail attachments, tag them, route to folders | Python + Google API |
-| [`llamaindex-reader`](./llamaindex-reader) | Custom LlamaIndex reader that enriches each node with FileTag metadata | Python + LlamaIndex |
+| [`llamaindex-reader`](./llamaindex-reader) | Custom LlamaIndex reader that enriches each node with Gemina FileTag metadata | Python + LlamaIndex |
 | [`langchain-loader`](./langchain-loader) | Equivalent LangChain document loader | Python + LangChain |
 
 ## Getting an API key
 
-All examples need an API key. Get one free (1,500 tags/month, no credit card) at https://console.gemina.co/registration/create-account.
+All examples need an API key. Get one free (free tier: 1,500 FileTag tags/month, no credit card) at https://console.gemina.co/registration/create-account.
 
 Set it as `GEMINA_API_KEY` in your shell:
 

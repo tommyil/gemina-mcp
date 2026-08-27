@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a bug in the live FileTag MCP server, the REST API, or one of the examples.
+description: Report a bug in the live Gemina MCP server, the REST API, or one of the examples.
 title: "[bug] "
 labels: ["bug"]
 body:

@@ -8,7 +8,7 @@ on:
 
 jobs:
   json-snippets:
-    name: validate JSON in llms-install.md + manifests
+    name: validate JSON in llms-install.md + README.md + manifests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,29 +19,49 @@ jobs:
       - name: Validate glama.json
         run: python -m json.tool < glama.json > /dev/null
 
-      - name: Extract and validate JSON snippets from llms-install.md
+      - name: Guard against MCP endpoint URLs missing the trailing slash
+        # The MCP endpoint is `/api/v1/mcp/` — without the trailing slash the
+        # server redirects and most MCP clients drop the POST body. `mc[p]` keeps
+        # this step's own pattern from matching itself. `/api/v1/mcp/public/`
+        # (the anonymous discovery endpoint) is a different, valid URL and passes.
+        # The RFC 9728 / 8414 discovery URLs (`/.well-known/oauth-protected-resource/`
+        # and `/.well-known/oauth-authorization-server/` followed by the resource
+        # path) carry that path without a slash by design and are exempt below.
+        run: |
+          set -o pipefail
+          hits=$(grep -rnE 'api/v1/mc[p]([^/]|$)' --include='*.md' --include='*.json' --include='*.yml' --include='*.py' --exclude-dir=.git . \
+            | grep -vE '\.well-known/oauth-(protected-resource|authorization-server)/api/v1/mc[p]' || true)
+          if [ -n "$hits" ]; then
+            echo "MCP endpoint URL(s) missing the trailing slash (expected /api/v1/mcp/):" >&2
+            echo "$hits" >&2
+            exit 1
+          fi
+          echo "All /api/v1/mcp/ URLs carry their trailing slash."
+
+      - name: Extract and validate JSON snippets from llms-install.md and README.md
         run: |
           python - <<'PY'
           import json, re, sys
           from pathlib import Path
 
-          path = Path("llms-install.md")
-          text = path.read_text(encoding="utf-8")
-          blocks = re.findall(r"```json\n(.*?)```", text, re.DOTALL)
-          if not blocks:
-              print("No JSON blocks found in llms-install.md", file=sys.stderr)
-              sys.exit(1)
-
           failed = []
-          for i, block in enumerate(blocks, start=1):
-              try:
-                  json.loads(block)
-              except json.JSONDecodeError as e:
-                  failed.append((i, str(e), block[:120]))
+          total = 0
+          for name in ("llms-install.md", "README.md"):
+              text = Path(name).read_text(encoding="utf-8")
+              blocks = re.findall(r"```json\n(.*?)```", text, re.DOTALL)
+              if not blocks:
+                  print(f"No JSON blocks found in {name}", file=sys.stderr)
+                  sys.exit(1)
+              total += len(blocks)
+              for i, block in enumerate(blocks, start=1):
+                  try:
+                      json.loads(block)
+                  except json.JSONDecodeError as e:
+                      failed.append((name, i, str(e), block[:120]))
 
           if failed:
-              for idx, err, head in failed:
-                  print(f"JSON block #{idx} failed: {err}\n  {head!r}", file=sys.stderr)
+              for name, idx, err, head in failed:
+                  print(f"{name}: JSON block #{idx} failed: {err}\n  {head!r}", file=sys.stderr)
               sys.exit(1)
-          print(f"All {len(blocks)} JSON blocks in llms-install.md parse cleanly.")
+          print(f"All {total} JSON blocks in llms-install.md and README.md parse cleanly.")
           PY

@@ -1,6 +1,6 @@
 # Contributing to gemina-mcp
 
-Thanks for the interest. This repo is the install, discovery, and examples surface for Gemina FileTag — not the server code itself. That shapes what PRs we accept.
+Thanks for the interest. This repo is the install, discovery, and examples surface for Gemina's MCP server — not the server code itself. That shapes what PRs we accept.
 
 ## What we welcome
 
@@ -42,3 +42,66 @@ This project follows the [Contributor Covenant](./CODE_OF_CONDUCT.md). Be kind. 
 
 - Issues: https://github.com/tommyil/gemina-mcp/issues
 - Email: info@gemina.co
+
+## Publishing to the MCP Registry (maintainers)
+
+There are **two** registry entries, both proven by the same `gemina.co` DNS
+namespace:
+
+| File | Registry name | Purpose |
+|---|---|---|
+| `server.json` | `co.gemina/gemina` | The live entry. Bump on every release. |
+| `server.legacy.json` | `co.gemina/filetag` | The pre-2.0 name. Republished once as 1.0.3 whose description points at `co.gemina/gemina`, then marked `deprecated`. Do not bump it again unless the pointer text changes. |
+
+The `co.gemina/*` namespace is proven by an Ed25519 key whose public half is in
+a DNS TXT record on the `gemina.co` apex. The private key lives **outside git**
+at `key.pem` (gitignored) and is backed up in Google Secret Manager
+(`mcp-registry-ed25519`, project `gemina-production`).
+
+The full publish-day runbook (pre-flight curls, exact commands, GitHub release
+and repo-metadata steps) is `docs/publish-checklist.md`. The short form:
+
+1. Edit `server.json`: bump `version`, keep `description` ≤ 100 characters,
+   keep every `/api/v1/mcp/` URL with its trailing slash.
+2. `python -m json.tool server.json > /dev/null` (and `server.legacy.json` if touched).
+   Optional stricter check: validate both against
+   `https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json`
+   with `python -c "import json,jsonschema,urllib.request; ..."` (see the checklist).
+3. `mcp-publisher login dns --domain gemina.co --private-key "$(openssl pkey -in key.pem -outform DER | tail -c 32 | xxd -p -c 64)"`
+4. Publish **the new name first**, then the legacy pointer:
+   `mcp-publisher publish` (defaults to `./server.json`), then
+   `mcp-publisher publish server.legacy.json`.
+   Order matters: the legacy description tells people to install
+   `co.gemina/gemina`, so that entry must already resolve.
+5. Mark the legacy name deprecated (see "Deprecation" below).
+6. Verify: `curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=co.gemina" | jq '.servers[] | {name: .server.name, version: .server.version, status: ._meta["io.modelcontextprotocol.registry/official"].status, latest: ._meta["io.modelcontextprotocol.registry/official"].isLatest}'`
+7. Commit the bumped manifests, tag `vX.Y.Z`, and create a GitHub Release.
+
+### Deprecation / status (registry API findings, 2026-08-26)
+
+- A `name` change publishes a *new* server; there is no rename and the old
+  entry stays listed. Hence the pointer republish above.
+- The registry **does** support lifecycle status. Every listed version carries
+  `_meta["io.modelcontextprotocol.registry/official"]` with `status`,
+  `statusChangedAt`, `publishedAt`, `updatedAt`, `isLatest` (and `statusMessage`
+  when set). Today all three `co.gemina/filetag` versions show `status: active`.
+- Status enum: `active | deprecated | deleted`. `deprecated` keeps the entry
+  visible **with a warning** (what we want for the pointer); `deleted` hides it
+  from default listings. `statusMessage` is optional, ≤ 500 chars, and not
+  allowed when setting `active`.
+- Endpoints (Bearer registry JWT from `mcp-publisher login`):
+  `PATCH /v0.1/servers/{serverName}/versions/{version}/status` (one version) and
+  `PATCH /v0.1/servers/{serverName}/status` (all versions), body
+  `{"status":"deprecated","statusMessage":"..."}`. There is also
+  `PUT /v0.1/servers/{serverName}/versions/{version}` (edit) and `DELETE`.
+- The CLI wraps this: `mcp-publisher status --status deprecated --all-versions --message "Renamed to co.gemina/gemina. Install that instead." co.gemina/filetag`
+  (`--yes` skips the confirmation). Requires `publish` or `edit` permission on
+  the namespace, i.e. the same DNS login.
+- Sources: `docs/reference/api/openapi.yaml` and `docs/reference/cli/commands.md`
+  in https://github.com/modelcontextprotocol/registry.
+
+Notes: the registry rejects non-standard fields and silently strips
+`documentationUrl` (it is not in the 2025-12-11 schema, which only tolerates it
+because the schema does not set `additionalProperties: false`). Keep it in the
+file anyway; sub-registries such as Glama read it.
+

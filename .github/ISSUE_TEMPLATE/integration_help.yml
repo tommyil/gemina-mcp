@@ -1,5 +1,5 @@
 name: Integration help
-description: You're trying to install FileTag MCP in a client and something's not working.
+description: You're trying to install the Gemina MCP server in a client and something's not working.
 title: "[help] Install in <client name>"
 labels: ["help wanted", "integration"]
 body:
@@ -8,7 +8,7 @@ body:
       value: |
         We'll help you get unstuck. Before filing, make sure:
 
-        - You have a valid API key (check at https://console.gemina.co)
+        - You can sign in at https://console.gemina.co (OAuth path) or have a valid API key (headless path)
         - You've fully **restarted** your MCP client (not just reloaded — restarted)
         - You've checked the [Troubleshooting](https://github.com/tommyil/gemina-mcp/blob/main/llms-install.md#8-troubleshooting) section
 
@@ -31,17 +31,14 @@ body:
   - type: textarea
     id: config
     attributes:
-      label: Your config (redact the API key)
-      description: Paste the exact JSON/YAML/TOML you have in your client's config file.
+      label: Your config (redact the API key, if any)
+      description: Paste the exact JSON/YAML/TOML you have in your client's config file. On the OAuth path there are no headers — that's expected.
       render: json
       placeholder: |
         {
           "mcpServers": {
             "gemina": {
-              "url": "https://api.gemina.co/api/v1/mcp/",
-              "headers": {
-                "X-API-Key": "REDACTED"
-              }
+              "url": "https://api.gemina.co/api/v1/mcp/"
             }
           }
         }
@@ -52,7 +49,7 @@ body:
     id: symptom
     attributes:
       label: What you see
-      description: "Specifically: do the Gemina tools appear in your client? If yes, what happens when you invoke them?"
+      description: "Specifically: did the client prompt you to sign in (OAuth)? Do the Gemina tools appear in your client? If yes, what happens when you invoke them?"
     validations:
       required: true
 
@@ -61,7 +58,7 @@ body:
     attributes:
       label: curl smoke-test result
       description: |
-        Run the smoke-test from llms-install.md section 5. If it succeeds, the issue is client-side. If it fails, the issue is auth or network.
+        Run the smoke-test from llms-install.md section 5 (it needs an API key — curl can't sign in). If it succeeds, the issue is client-side. If it fails, the issue is auth or network.
         Paste the response (redact any sensitive headers).
       render: shell
 

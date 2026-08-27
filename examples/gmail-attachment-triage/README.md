@@ -1,12 +1,12 @@
 # gmail-attachment-triage
 
-Pull PDF and image attachments from Gmail, tag them with Gemina FileTag, and apply Gmail labels based on the structured metadata. The headline email-automation use case.
+Pull PDF and image attachments from Gmail, tag them with Gemina, and apply Gmail labels based on the structured metadata. The headline email-automation use case.
 
 ## What it does
 
 1. Authenticates with Gmail (OAuth2, read-only + labels scope).
 2. Searches for messages matching a query (default: `has:attachment newer_than:7d`).
-3. Downloads attachments, tags each one with FileTag.
+3. Downloads attachments, tags each one with Gemina's `tag_file` (FileTag, free tier).
 4. Applies Gmail labels by document type — `Invoices`, `Contracts`, `Receipts`, etc.
 5. Writes a CSV log of `message_id, sender, document_type, vendor, date, total`.
 
@@ -54,13 +54,13 @@ Labels are created if they don't exist.
 
 ## Cost estimation
 
-Each attachment counts as one FileTag call. With the free tier's 1,500 calls/month, this comfortably covers a small business mailbox. Heavy users (~50 attachments/day) will exhaust the free tier mid-month — see [pricing](https://www.gemina.co/pricing) for paid plans.
+Each attachment counts as one FileTag tag. With the free tier's 1,500 FileTag tags/month, this comfortably covers a small business mailbox. Heavy users (~50 attachments/day) will exhaust the free tier mid-month — see [pricing](https://www.gemina.co/pricing) for paid plans.
 
 ## Privacy
 
-- The script never re-uploads message bodies to FileTag, only attachments.
+- The script never re-uploads message bodies to Gemina, only attachments.
 - `token.json` stores the Google OAuth refresh token. Keep it out of version control (already in `.gitignore`).
-- FileTag's privacy guarantees apply: documents never used for training, 7-day deletion, AES-256 at rest.
+- Gemina's privacy guarantees apply: documents never used for training, 7-day deletion, AES-256 at rest.
 
 ## What's next
 

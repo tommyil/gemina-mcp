@@ -1,12 +1,12 @@
 # llamaindex-reader
 
-A custom LlamaIndex reader that wraps each document with Gemina FileTag metadata before it lands in your index. Lets you filter retrieval by vendor, date, document type, and other structured fields — much faster and more accurate than re-extracting that metadata at query time.
+A custom LlamaIndex reader that wraps each document with Gemina's FileTag metadata before it lands in your index. Lets you filter retrieval by vendor, date, document type, and other structured fields — much faster and more accurate than re-extracting that metadata at query time.
 
 ## Why this matters for RAG
 
 Vanilla document ingestion treats every PDF as a bag of text. When a user asks "what did we pay Acme Corp last quarter?", the retriever ranks chunks by semantic similarity to the question — which is brittle, because the answer chunk may not mention "Acme" or "paid" verbatim.
 
-FileTag fixes this by attaching `metadata.vendor = "Acme Corp"` and `metadata.date = "2025-11-12"` to every chunk at ingestion time. Now retrieval can pre-filter to vendor=Acme + date in Q4 before running the semantic search. Cheaper, faster, more accurate.
+Gemina fixes this by attaching `metadata.vendor = "Acme Corp"` and `metadata.date = "2025-11-12"` to every chunk at ingestion time. Now retrieval can pre-filter to vendor=Acme + date in Q4 before running the semantic search. Cheaper, faster, more accurate.
 
 ## Setup
 
@@ -68,6 +68,6 @@ nodes = retriever.retrieve("what did we pay last quarter?")
 
 ## What's next
 
-- Persist the FileTag JSON alongside the index for re-indexing without re-tagging.
+- Persist the Gemina response JSON alongside the index for re-indexing without re-tagging.
 - Use the `enriched_file_url` to store a copy with metadata baked into the PDF — useful for downstream tools that read PDF properties directly.
 - See the equivalent for LangChain: [langchain-loader](../langchain-loader).
