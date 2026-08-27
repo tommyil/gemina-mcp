@@ -115,6 +115,17 @@ registry strips `documentationUrl`; expected).
 
 ## 4. Publish the legacy pointer, then deprecate it
 
+> **What actually happened on 2026-08-27:** the registry enforces ONE remote
+> URL per server name. `co.gemina/filetag` held `https://api.gemina.co/api/v1/mcp/`,
+> and deprecating it does NOT release the URL — only `status deleted` does.
+> Order that worked: `status --status deleted --all-versions co.gemina/filetag`
+> → `publish` (co.gemina/gemina 2.0.0) → publish 1.0.3 of the legacy name
+> **without `remotes`** (schema requires only name/description/version; it
+> is a pointer, not an installable server) → `status --status deprecated
+> co.gemina/filetag 1.0.3`. The registry also stores `isRequired:false` as
+> `null`, and the `?search=` listing is CDN-cached for minutes — verify with
+> `/v0.1/servers/<name>/versions`.
+
 ```bash
 mcp-publisher publish server.legacy.json   # co.gemina/filetag 1.0.3
 mcp-publisher status --status deprecated --all-versions --yes \
