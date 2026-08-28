@@ -4,6 +4,11 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-08-28
+
+### Changed
+- Registry manifest: icon and documentation now point at the live website (`www.gemina.co/assets/gemina-logo.png`, `www.gemina.co/docs/mcp`) instead of the 2.0.0 stand-ins. No server changes.
+
 ## [2.0.0] - 2026-08-27
 
 ### Changed

@@ -3,11 +3,11 @@
   "name": "co.gemina/gemina",
   "title": "Gemina",
   "description": "Invoice OCR, document extraction, search and free FileTag tagging for AI agents. OAuth or API key.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "icons": [
     {
-      "src": "https://console.gemina.co/android-chrome-512x512.png",
-      "sizes": ["512x512"],
+      "src": "https://www.gemina.co/assets/gemina-logo.png",
+      "sizes": ["400x400"],
       "mimeType": "image/png"
     }
   ],
@@ -16,7 +16,7 @@
     "source": "github"
   },
   "websiteUrl": "https://www.gemina.co/product/agents",
-  "documentationUrl": "https://github.com/tommyil/gemina-mcp#readme",
+  "documentationUrl": "https://www.gemina.co/docs/mcp",
   "remotes": [
     {
       "type": "streamable-http",
