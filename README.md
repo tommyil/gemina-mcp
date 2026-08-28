@@ -83,6 +83,7 @@ Running headless (CI, servers, scripts, or a client that doesn't prompt to sign 
 - Dynamic Client Registration (DCR) and Client ID Metadata Documents (CIMD) are both supported — no pre-registration, no client ID/secret to paste.
 - Scope: `mcp`. Access tokens last 1 hour; refresh tokens rotate and last 30 days.
 - Each connected app gets its own API key named `<app> (OAuth)`. See and revoke them under **Console → API Keys → Connected apps** at https://console.gemina.co.
+- Most hosts need nothing beyond the URL. Three need an explicit second step — **Codex CLI**, **OpenClaw** and **Hermes-Agent** (see their sections) — and three can't sign in at all: **Cline** (no documented OAuth for remote servers as of 2026-08-27), **curl** and the **OpenAI Responses API** (no browser). **ChatGPT** is the mirror case: it signs in, but cannot send an API key.
 
 </details>
 
