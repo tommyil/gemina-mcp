@@ -40,8 +40,7 @@ handler that answers the anonymous `/api/v1/mcp/public/` `tools/list` and
 ## Listing text
 
 - Name: Gemina
-- Summary: Invoice OCR, document extraction, document search and free FileTag
-  tagging for AI agents. OAuth 2.1 or API key.
+- Summary: Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
 - Homepage: https://www.gemina.co/product/agents
 - Docs: https://www.gemina.co/docs/mcp
 - Repo: https://github.com/tommyil/gemina-mcp

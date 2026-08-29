@@ -1,19 +1,12 @@
-# mcp.so listing
+# Canonical listing copy (2026-08-30)
 
-**Title:** Gemina
+Use verbatim in every directory. Source of truth for wording.
 
-**Tagline (short):** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
+**One-liner:** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
 
-**Server URL:** https://api.gemina.co/api/v1/mcp/
-**Transport:** Streamable HTTP (remote, hosted)
-**Repository:** https://github.com/tommyil/gemina-mcp
-**Homepage:** https://www.gemina.co/product/agents
-**Docs:** https://www.gemina.co/docs/mcp
-**Logo:** https://www.gemina.co/assets/gemina-logo.png
-**Registry name:** co.gemina/gemina
-**Tags:** invoice-ocr, document-extraction, document-search, oauth, pdf, metadata, tagging, rag, document-ai
+**Registry description (≤100):** Extract, search and tag any document: invoices, receipts, contracts, templates. OAuth or API key.
 
-**Description:**
+**Long description:**
 
 Gemina is a hosted MCP server for working with documents of any kind — invoices, receipts, contracts, forms, statements, delivery notes, or any other PDF or image your team handles. Define your own custom templates to extract exactly the fields you need from any document type. One endpoint, 13 tools in three groups.
 

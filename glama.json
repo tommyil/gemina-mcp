@@ -4,7 +4,7 @@
     "tommyil"
   ],
   "name": "Gemina",
-  "description": "Invoice OCR, document extraction, document search/aggregation, and free FileTag tagging for AI agents. One remote Streamable HTTP endpoint, 13 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key.",
+  "description": "Extract, search and tag any document — invoices, receipts, contracts, forms, or your own custom templates. One remote Streamable HTTP endpoint, 13 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key. Data residency per account: EU, US, Israel or Asia.",
   "homepage": "https://www.gemina.co/product/agents",
   "repository": "https://github.com/tommyil/gemina-mcp",
   "documentation": "https://www.gemina.co/docs/mcp",
@@ -126,15 +126,31 @@
   "toolGroups": {
     "FileTag": {
       "tier": "free",
-      "tools": ["files_create_upload", "tag_file", "tag_url"]
+      "tools": [
+        "files_create_upload",
+        "tag_file",
+        "tag_url"
+      ]
     },
     "Extraction": {
       "tier": "paid",
-      "tools": ["files_create_extraction_upload", "extract_document", "get_extraction_result", "list_extractions", "get_extraction", "get_document", "submit_extraction_feedback"]
+      "tools": [
+        "files_create_extraction_upload",
+        "extract_document",
+        "get_extraction_result",
+        "list_extractions",
+        "get_extraction",
+        "get_document",
+        "submit_extraction_feedback"
+      ]
     },
     "Document Intelligence": {
       "tier": "paid",
-      "tools": ["query_documents", "aggregate_documents", "index_document"]
+      "tools": [
+        "query_documents",
+        "aggregate_documents",
+        "index_document"
+      ]
     }
   },
   "supportedFileTypes": [
