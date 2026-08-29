@@ -4,6 +4,10 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
+## [2.0.2] - 2026-08-30
+
+- Registry description repositioned from "invoice OCR" to any-document extraction, search and tagging (custom templates); canonical listing copy in `docs/outreach/listing-copy.md` (data residency: EU, US, Israel, Asia).
+
 ## [2.0.1] - 2026-08-28
 
 ### Changed
