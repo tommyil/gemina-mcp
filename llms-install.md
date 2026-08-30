@@ -7,8 +7,8 @@
 `https://raw.githubusercontent.com/tommyil/gemina-mcp/main/llms-install.md`
 
 - Source repository: https://github.com/tommyil/gemina-mcp
-- Product page: https://www.gemina.co/filetag
-- Full docs (markdown): https://www.gemina.co/docs/filetag.md
+- Product page: https://www.gemina.co/product/agents
+- Full docs (markdown): https://www.gemina.co/docs/mcp.md
 - MCP manifest (JSON): https://www.gemina.co/.well-known/mcp.json
 - Site index: https://www.gemina.co/llms.txt
 
@@ -603,5 +603,5 @@ The same API key works for both MCP and REST.
 ## 9. Get help
 
 - Email: info@gemina.co
-- Docs: https://www.gemina.co/docs/filetag
+- Docs: https://www.gemina.co/docs/mcp
 - Console (manage API keys, connected apps, billing, usage): https://console.gemina.co

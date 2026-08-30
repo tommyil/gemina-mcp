@@ -10,7 +10,7 @@
 [![MCP](https://img.shields.io/badge/MCP-Streamable%20HTTP-purple.svg)](https://modelcontextprotocol.io)
 [![Last commit](https://img.shields.io/github/last-commit/tommyil/gemina-mcp.svg)](https://github.com/tommyil/gemina-mcp/commits/main)
 
-[Install](#quick-install) • [Examples](./examples) • [Product page](https://www.gemina.co/filetag) • [Full docs](https://www.gemina.co/docs/filetag)
+[Install](#quick-install) • [Examples](./examples) • [Product page](https://www.gemina.co/product/agents) • [Full docs](https://www.gemina.co/docs/mcp)
 
 </div>
 
@@ -26,14 +26,16 @@ The server itself is closed-source (operated by Gemina). Everything in this repo
 
 ## What you get
 
-Send a PDF or image. Get back structured metadata, six suggested filenames, and a downloadable copy with metadata already embedded in the file itself.
+One sign-in, three tool groups. Every group takes any PDF or image up to 50 MB (PDF, PNG, JPEG, GIF, WebP, HEIC/HEIF, AVIF).
+
+**1. FileTag — tag, rename, enrich (free tier).** Send a document, get structured metadata, six suggested filenames, and a downloadable copy with the metadata embedded in the file itself. Tools: `files_create_upload` → `tag_file`, or `tag_url`.
+
+**2. Extraction — pull the fields out (paid).** OCR for any document; ready-made models for invoice headers and invoice line items (plus Hebrew document details and line items); and **custom templates** — you define the fields, Gemina extracts them from any document type: contracts, forms, statements, delivery notes, IDs, anything. Tools: `files_create_extraction_upload` → `extract_document` → `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `submit_extraction_feedback` (send corrections back).
+
+**3. Document Intelligence — ask your archive (paid).** Every extraction is indexed. Search by vendor, date, amount, type or free text; get sums, averages and counts grouped by vendor, currency, type or month. Tools: `query_documents`, `aggregate_documents`, `index_document`.
 
 <details>
-<summary><b>Sample input → sample output</b> (click to expand)</summary>
-
-**Input:** any PDF or image up to 50 MB (PDF, PNG, JPEG, GIF, WebP, HEIC, AVIF).
-
-**Output:**
+<summary><b>Sample: FileTag output</b> (click to expand)</summary>
 
 ```json
 {
@@ -62,7 +64,43 @@ Send a PDF or image. Get back structured metadata, six suggested filenames, and 
 }
 ```
 
-Three uses out of one response — pick the one your code needs, ignore the rest.
+</details>
+
+<details>
+<summary><b>Sample: extraction output</b> (abridged — <code>extract_document</code> with <code>invoice_headers</code>)</summary>
+
+```json
+{
+  "status": "success",
+  "meta": { "extractionType": "invoice_headers", "modelType": "invictus", "extractionId": "…" },
+  "values": {
+    "vendorName":   { "value": "Acme Office Supplies Ltd.", "confidence": 0.98 },
+    "documentDate": { "value": "2026-02-15" },
+    "docNumber":    { "value": "12345" },
+    "netAmount":    { "value": 692.31 },
+    "vatAmount":    { "value": 117.69 },
+    "totalAmount":  { "value": 810.00 },
+    "currency":     { "value": "USD" }
+  },
+  "document": { "documentId": "…", "externalId": "your-idempotency-key" }
+}
+```
+
+With `custom_template`, `values` contains exactly the fields you defined in the template.
+
+</details>
+
+<details>
+<summary><b>Sample: Document Intelligence</b> (abridged — <code>aggregate_documents</code>)</summary>
+
+```json
+{
+  "rows": [
+    { "group": { "vendor_name": "Acme Office Supplies Ltd.", "currency": "USD" }, "values": { "sum_total_amount": 810.0, "count": 1 } },
+    { "group": { "vendor_name": "BluePeak Cafe",            "currency": "USD" }, "values": { "sum_total_amount": 26.19, "count": 1 } }
+  ]
+}
+```
 
 </details>
 
@@ -616,28 +654,30 @@ The full reference for each group is in [`llms-install.md`](./llms-install.md#3-
 
 ## Use cases
 
-The same FileTag tools (`tag_file` or `tag_url`) power all of these. Each example has a dedicated walkthrough in [`examples/`](./examples).
-
-| Use case | What it does | Example |
+| Use case | Tools | Example |
 |---|---|---|
-| 📥 **Email attachment triage** | Tag inbound attachments, route to folders by vendor/type | [`examples/gmail-attachment-triage`](./examples/gmail-attachment-triage) |
-| 🔍 **RAG ingestion** | Attach structured metadata to vector store entries so retrieval can filter by vendor, date, or document type | [`examples/llamaindex-reader`](./examples/llamaindex-reader) · [`examples/langchain-loader`](./examples/langchain-loader) |
-| 🧾 **Invoice automation** | Extract vendor, totals, line items; route to AP; export to accounting | [`examples/bulk-tag-folder`](./examples/bulk-tag-folder) |
-| 📁 **Bulk document filing** | Walk a directory, rename every file to a consistent pattern | [`examples/bulk-tag-folder`](./examples/bulk-tag-folder) |
+| 🧾 **Invoice / receipt data entry** | `extract_document` (`invoice_headers`, `invoice_line_items`) → your accounting, ERP or spreadsheet | [`examples/bulk-tag-folder`](./examples/bulk-tag-folder) |
+| 📄 **Any document, your fields** | `extract_document` with a `custom_template` (contracts, forms, statements, delivery notes, IDs) | — define the template in the [console](https://console.gemina.co) |
+| 📊 **Questions over your archive** | `query_documents`, `aggregate_documents` ("total spend with vendor X in Q2") | — |
+| 📥 **Email attachment triage** | FileTag: tag inbound attachments, route to folders by vendor/type | [`examples/gmail-attachment-triage`](./examples/gmail-attachment-triage) |
+| 🔍 **RAG ingestion** | FileTag metadata on vector-store entries so retrieval can filter by vendor, date, type | [`examples/llamaindex-reader`](./examples/llamaindex-reader) · [`examples/langchain-loader`](./examples/langchain-loader) |
+| 📁 **Bulk document filing** | FileTag: walk a directory, rename every file to a consistent pattern | [`examples/bulk-tag-folder`](./examples/bulk-tag-folder) |
 | ⚡ **Quickstart (curl)** | First tag in three minutes, no MCP client needed | [`examples/curl-quickstart`](./examples/curl-quickstart) |
 | 🖥️ **Claude Desktop walkthrough** | Step-by-step setup with screenshots | [`examples/claude-desktop`](./examples/claude-desktop) |
 
 ## Why Gemina, not a raw LLM call?
 
-A naive "ask GPT to tag this PDF" pipeline breaks in production: hallucinated vendor names, inconsistent date formats, no structured output, no PDF metadata embedding, no enriched-file roundtrip. FileTag is the harness around that call — specialized agents that **reason, cross-check, and refuse to guess** — wrapped in a single endpoint with a stable JSON contract.
+A naive "ask the model to read this PDF" pipeline breaks in production: hallucinated vendor names, inconsistent dates, no stable schema, no line-item arithmetic, no feedback loop, nothing to search afterwards.
 
 | | Raw LLM | Gemina |
 |---|---|---|
-| Structured output | Free text, requires parsing | Stable JSON schema |
-| Filename suggestions | None | Six patterns, ready to use |
-| PDF metadata embedding | DIY | Returned as downloadable enriched copy |
-| Hallucinations | Frequent | Cross-checked, refuses when unsure |
-| Per-document cost | $$ per call | Free tier: first 1,500 FileTag tags/month |
+| Structured output | Free text, requires parsing | Stable JSON schema per extraction type, or your own template fields |
+| Line items | Rows guessed from text | Column-aware line-item extraction with totals reconciliation |
+| Hallucinations | Frequent | Cross-checked, refuses when unsure; corrections fed back with `submit_extraction_feedback` |
+| Search & totals | Build your own index | Every extraction indexed; `query_documents` / `aggregate_documents` |
+| Filing | DIY | Six filename patterns + metadata-embedded copy (FileTag) |
+| Data residency | Wherever the model runs | You pick the region per account: EU, US, Israel or Asia |
+| Cost | $$ per call | Free tier: first 1,500 FileTag tags/month |
 
 ## Privacy & trust
 
@@ -650,7 +690,7 @@ Full details on the [Gemina Trust Center](https://www.gemina.co/trust-center).
 
 ## Documentation
 
-- 📖 **Full docs:** [gemina.co/docs/filetag](https://www.gemina.co/docs/filetag) — REST + MCP reference
+- 📖 **Full docs:** [gemina.co/docs/mcp](https://www.gemina.co/docs/mcp) — REST + MCP reference
 - 🤖 **Agent install guide:** [`llms-install.md`](./llms-install.md) — machine-readable, used by AI agents auto-discovering the server
 - 🔌 **MCP manifest:** [gemina.co/.well-known/mcp.json](https://www.gemina.co/.well-known/mcp.json)
 - 🏷️ **REST endpoint reference:** [gemina.co/docs.md](https://www.gemina.co/docs.md)
