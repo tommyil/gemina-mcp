@@ -3,7 +3,7 @@
   "name": "co.gemina/gemina",
   "title": "Gemina",
   "description": "Extract, search and tag any document: invoices, receipts, contracts, templates. OAuth or API key.",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "icons": [
     {
       "src": "https://www.gemina.co/assets/gemina-logo.png",

@@ -4,6 +4,12 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-09-06
+
+### Added
+- **`add_document_extractions`** — the server now advertises a 14th tool: run more extraction types on a document Gemina already stores (addressed by its document id from `tag_file`, `extract_document`, or `get_document`), no re-upload. Paid per extraction; poll `pollCorrelationId` with `get_extraction_result`.
+- **`serverInfo`** now carries the server version, website, and icon; every tool parameter carries a description. Registry manifest `version` aligned to the server contract (2.1.0).
+
 ## [2.0.2] - 2026-08-30
 
 - Registry description repositioned from "invoice OCR" to any-document extraction, search and tagging (custom templates); canonical listing copy in `docs/outreach/listing-copy.md` (data residency: EU, US, Israel, Asia).
