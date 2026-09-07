@@ -37,7 +37,7 @@
 
 ## 3. Tools exposed
 
-One server, 13 tools in three groups, plus 2 prompts. Anonymous discovery (`tools/list`, `prompts/list`) is served at `https://api.gemina.co/api/v1/mcp/public/`.
+One server, 14 tools in three groups, plus 2 prompts. Anonymous discovery (`tools/list`, `prompts/list`) is served at `https://api.gemina.co/api/v1/mcp/public/`.
 
 **FileTag (free tier)**
 
@@ -53,9 +53,12 @@ One server, 13 tools in three groups, plus 2 prompts. Anonymous discovery (`tool
 - **`list_extractions`** — List past extractions, newest first; filter by `external_id`, `end_user_id`, or date window; paginate with `skip`/`limit`.
 - **`get_extraction`** — Fetch one extraction by id, including the full extracted data.
 - **`get_document`** — Fetch one document by id, including all of its extractions.
+- **`add_document_extractions`** — Run more extraction types on a document Gemina already stores (by document id from `tag_file`, `extract_document`, or `get_document`) — no re-upload; paid per extraction.
 - **`submit_extraction_feedback`** — Submit verified/corrected field values for a completed extraction (`label:<human label>|ptr:/<json pointer>` keys); returns a per-field comparison summary.
 
 **Document Intelligence (paid)**
+
+Ask questions and run spend analytics across your whole indexed collection — no re-upload. Documents you tag (FileTag) or run a structured extraction on are submitted for indexing when indexing is enabled; plain `ocr` is not indexed, and indexing can be skipped (no extractable fields, or no indexing credits).
 
 - **`query_documents`** — Search the indexed document collection: `structured` (exact field filters), `semantic` (natural-language similarity), or `hybrid` (keyword + semantic, best default).
 - **`aggregate_documents`** — Sums/averages/min/max/counts over indexed documents, optionally grouped (vendor, currency, document type, month, ...) and filtered like `query_documents`.

@@ -12,7 +12,7 @@ We have just published version 2.0.0 to the official MCP Registry under a new
 name, **`co.gemina/gemina`**, and republished `co.gemina/filetag` as 1.0.3
 with a description pointing at the new name (it is marked `deprecated` in the
 registry). Same server, same endpoint (`https://api.gemina.co/api/v1/mcp/`),
-new name because the product outgrew FileTag: it now exposes 13 tools in three
+new name because the product outgrew FileTag: it now exposes 14 tools in three
 groups (FileTag, Extraction, Document Intelligence) plus 2 prompts.
 
 Could you please:

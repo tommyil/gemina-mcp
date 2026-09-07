@@ -4,6 +4,9 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
+### Changed
+- Listing copy refreshed across `README.md`, `llms-install.md`, `docs/outreach/*`, and `glama.json`: tool count 13 → 14 (documents `add_document_extractions`), Document Intelligence repositioned as document Q&A and spend analytics with example queries, and indexing claims made precise (indexing is opt-in and best-effort — FileTag + structured extractions are submitted for indexing, plain OCR is not, and indexing can skip on no credits or fieldless output). No server contract change.
+
 ## [2.1.0] - 2026-09-06
 
 ### Added
