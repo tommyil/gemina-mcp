@@ -37,7 +37,7 @@ https://claude.com/docs/connectors/building/review-criteria (fetched
    no "missing title/annotations" flags.
 4. **Listing**
    - Name (≤100): `Gemina`
-   - One-liner (≤200 in the portal, 2026-08-30): `Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.`
+   - One-liner (≤200 in the portal, 2026-08-30): `Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 14 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.`
    - Description (≤2000): reuse `docs/outreach/mcp-so-listing.md` description.
    - Categories (1–5): Productivity, Data & Analytics, Developer Tools,
      Finance (pick whatever the portal offers closest to these).

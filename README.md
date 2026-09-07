@@ -20,7 +20,7 @@
 
 This repository is the **discovery, install, and examples surface** for Gemina's MCP server. The server itself is hosted at `https://api.gemina.co/api/v1/mcp/` — there is no daemon to run locally. Point your MCP-compatible client at the endpoint, sign in with your Gemina account (or paste an API key for headless use), and tag your first document in under a minute.
 
-One server, three tool groups: **FileTag** (free tier — tag, rename, and enrich any PDF or image), **Extraction** (Core-OCR: invoice headers, line items, full text, custom templates), and **Document Intelligence** (search and aggregate over your indexed documents). See [Tools](#tools) for the full list.
+One server, three tool groups: **FileTag** (free tier — tag, rename, and enrich any PDF or image), **Extraction** (Core-OCR: invoice headers, line items, full text, custom templates), and **Document Intelligence** (ask questions and run spend analytics over your indexed documents — no re-upload). See [Tools](#tools) for the full list.
 
 The server itself is closed-source (operated by Gemina). Everything in this repo — install snippets, examples, integration code — is MIT-licensed and contributions are welcome.
 
@@ -30,9 +30,9 @@ One sign-in, three tool groups. Every group takes any PDF or image up to 50 MB (
 
 **1. FileTag — tag, rename, enrich (free tier).** Send a document, get structured metadata, six suggested filenames, and a downloadable copy with the metadata embedded in the file itself. Tools: `files_create_upload` → `tag_file`, or `tag_url`.
 
-**2. Extraction — pull the fields out (paid).** OCR for any document; ready-made models for invoice headers and invoice line items (plus Hebrew document details and line items); and **custom templates** — you define the fields, Gemina extracts them from any document type: contracts, forms, statements, delivery notes, IDs, anything. Tools: `files_create_extraction_upload` → `extract_document` → `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `submit_extraction_feedback` (send corrections back).
+**2. Extraction — pull the fields out (paid).** OCR for any document; ready-made models for invoice headers and invoice line items (plus Hebrew document details and line items); and **custom templates** — you define the fields, Gemina extracts them from any document type: contracts, forms, statements, delivery notes, IDs, anything. Tools: `files_create_extraction_upload` → `extract_document` → `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `add_document_extractions` (run more extraction types on a stored document — no re-upload), `submit_extraction_feedback` (send corrections back).
 
-**3. Document Intelligence — ask your archive (paid).** Every extraction is indexed. Search by vendor, date, amount, type or free text; get sums, averages and counts grouped by vendor, currency, type or month. Tools: `query_documents`, `aggregate_documents`, `index_document`.
+**3. Document Intelligence — ask your archive (paid).** Ask questions and run spend analytics across your whole indexed collection — no re-upload. Every document you tag (FileTag) or run a structured extraction on is submitted for indexing when indexing is enabled — plain OCR isn't, and a document can be skipped (no extractable fields, or no indexing credits). Search by vendor, date, amount, type or free text (`query_documents`); get sums, averages and counts grouped by vendor, currency, type or month (`aggregate_documents`) — e.g. “total spent per vendor last quarter”. Tools: `query_documents`, `aggregate_documents`, `index_document`.
 
 <details>
 <summary><b>Sample: FileTag output</b> (click to expand)</summary>
@@ -618,7 +618,7 @@ Need more? Paid plans add larger monthly allowances, the extraction and document
 
 ## Tools
 
-One endpoint, 13 tools in three groups, plus 2 prompts. Every tool is listed for every key; the extraction and document-intelligence groups require a paid plan (see [pricing](https://www.gemina.co/pricing)). Anonymous discovery (`tools/list`, `prompts/list`) is available at `https://api.gemina.co/api/v1/mcp/public/`.
+One endpoint, 14 tools in three groups, plus 2 prompts. Every tool is listed for every key; the extraction and document-intelligence groups require a paid plan (see [pricing](https://www.gemina.co/pricing)). Anonymous discovery (`tools/list`, `prompts/list`) is available at `https://api.gemina.co/api/v1/mcp/public/`.
 
 **FileTag (free tier)**
 
@@ -638,6 +638,7 @@ One endpoint, 13 tools in three groups, plus 2 prompts. Every tool is listed for
 | `list_extractions` | List past extractions, newest first, with filters and pagination. |
 | `get_extraction` | Fetch one extraction by id, including the full extracted data. |
 | `get_document` | Fetch one document by id, including all of its extractions. |
+| `add_document_extractions` | Run more extraction types on a document Gemina already stores (by id) — no re-upload; paid per extraction. |
 | `submit_extraction_feedback` | Send verified/corrected field values back — the extraction-quality feedback loop. |
 
 **Document Intelligence**

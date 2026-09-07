@@ -4,7 +4,7 @@
     "tommyil"
   ],
   "name": "Gemina",
-  "description": "Extract, search and tag any document — invoices, receipts, contracts, forms, or your own custom templates. One remote Streamable HTTP endpoint, 13 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key. Data residency per account: EU, US, Israel or Asia.",
+  "description": "Extract, search and tag any document — invoices, receipts, contracts, forms, or your own custom templates. One remote Streamable HTTP endpoint, 14 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key. Data residency per account: EU, US, Israel or Asia.",
   "homepage": "https://www.gemina.co/product/agents",
   "repository": "https://github.com/tommyil/gemina-mcp",
   "documentation": "https://www.gemina.co/docs/mcp",
