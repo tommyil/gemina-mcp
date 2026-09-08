@@ -53,7 +53,7 @@ One server, 14 tools in three groups, plus 2 prompts. Anonymous discovery (`tool
 - **`list_extractions`** — List past extractions, newest first; filter by `external_id`, `end_user_id`, or date window; paginate with `skip`/`limit`.
 - **`get_extraction`** — Fetch one extraction by id, including the full extracted data.
 - **`get_document`** — Fetch one document by id, including all of its extractions.
-- **`add_document_extractions`** — Run more extraction types on a document Gemina already stores (by document id from `tag_file`, `extract_document`, or `get_document`) — no re-upload; paid per extraction.
+- **`add_document_extractions`** — Run more extraction types on a document Gemina already stores (by document id from `tag_file`, `extract_document`, or `get_document`) — no re-upload; paid per extraction. Serves two workflows. Leave `wait` at its default to hold the call briefly and read the extracted values in the same turn (poll `pollCorrelationId` with `get_extraction_result` if it is still running). Pass `wait=false` to return immediately when you only need the document filed for later search — the extraction still runs to completion, and its outcome is visible afterwards via `get_document` / `list_extractions`. Both modes cost the same. Every structured type (not plain `ocr`) is also submitted for indexing, so the document becomes answerable by `query_documents` / `aggregate_documents` — indexing is opt-in per tenant, plan-gated and best-effort.
 - **`submit_extraction_feedback`** — Submit verified/corrected field values for a completed extraction (`label:<human label>|ptr:/<json pointer>` keys); returns a per-field comparison summary.
 
 **Document Intelligence (paid)**
