@@ -30,7 +30,7 @@ One sign-in, three tool groups. Every group takes any PDF or image up to 50 MB (
 
 **1. FileTag — tag, rename, enrich (free tier).** Send a document, get structured metadata, six suggested filenames, and a downloadable copy with the metadata embedded in the file itself. Tools: `files_create_upload` → `tag_file`, or `tag_url`.
 
-**2. Extraction — pull the fields out (paid).** OCR for any document; ready-made models for invoice headers and invoice line items (plus Hebrew document details and line items); and **custom templates** — you define the fields, Gemina extracts them from any document type: contracts, forms, statements, delivery notes, IDs, anything. Tools: `files_create_extraction_upload` → `extract_document` → `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `add_document_extractions` (run more extraction types on a stored document — no re-upload), `submit_extraction_feedback` (send corrections back).
+**2. Extraction — pull the fields out (paid).** OCR for any document; ready-made models for invoice headers and invoice line items (plus Hebrew document details and line items); and **custom templates** — you define the fields, Gemina extracts them from any document type: contracts, forms, statements, delivery notes, IDs, anything. Tools: `files_create_extraction_upload` → `extract_document` → `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `add_document_extractions` (run more extraction types on a stored document — no re-upload; wait for the values, or `wait=false` and just file it for later search), `submit_extraction_feedback` (send corrections back).
 
 **3. Document Intelligence — ask your archive (paid).** Ask questions and run spend analytics across your whole indexed collection — no re-upload. Every document you tag (FileTag) or run a structured extraction on is submitted for indexing when indexing is enabled — plain OCR isn't, and a document can be skipped (no extractable fields, or no indexing credits). Search by vendor, date, amount, type or free text (`query_documents`); get sums, averages and counts grouped by vendor, currency, type or month (`aggregate_documents`) — e.g. “total spent per vendor last quarter”. Tools: `query_documents`, `aggregate_documents`, `index_document`.
 
@@ -638,7 +638,7 @@ One endpoint, 14 tools in three groups, plus 2 prompts. Every tool is listed for
 | `list_extractions` | List past extractions, newest first, with filters and pagination. |
 | `get_extraction` | Fetch one extraction by id, including the full extracted data. |
 | `get_document` | Fetch one document by id, including all of its extractions. |
-| `add_document_extractions` | Run more extraction types on a document Gemina already stores (by id) — no re-upload; paid per extraction. |
+| `add_document_extractions` | Run more extraction types on a document Gemina already stores (by id) — no re-upload; paid per extraction. Two modes: wait for the values (default), or `wait=false` to file the document for later search and return at once. |
 | `submit_extraction_feedback` | Send verified/corrected field values back — the extraction-quality feedback loop. |
 
 **Document Intelligence**

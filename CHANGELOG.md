@@ -4,6 +4,9 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
+### Added
+- **`add_document_extractions` now takes `wait`** (optional, defaults to `true` — the existing behaviour). Agents hit this tool with two different intents: some need the extracted values in the same turn, others only want the document filed so they can search it later. `wait=false` returns immediately with `newExtractionIds` and `pollCorrelationId` instead of holding the call; the extraction and its indexing still run to completion server-side, and the outcome — including a failure — shows up afterwards in `get_document` / `list_extractions`. Both modes are billed identically (paid per extraction; no re-upload). The tool's description and title now also name the payoff for the second workflow: a structured extraction is what puts a document into the searchable collection with the full field set, queryable via `query_documents` / `aggregate_documents` (indexing stays opt-in, plan-gated and best-effort; plain `ocr` is not indexed).
+
 ### Changed
 - Listing copy refreshed across `README.md`, `llms-install.md`, `docs/outreach/*`, and `glama.json`: tool count 13 → 14 (documents `add_document_extractions`), Document Intelligence repositioned as document Q&A and spend analytics with example queries, and indexing claims made precise (indexing is opt-in and best-effort — FileTag + structured extractions are submitted for indexing, plain OCR is not, and indexing can skip on no credits or fieldless output). No server contract change.
 
