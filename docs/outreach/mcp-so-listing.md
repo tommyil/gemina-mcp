@@ -2,7 +2,7 @@
 
 **Title:** Gemina
 
-**Tagline (short):** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 14 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
+**Tagline (short):** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
 
 **Server URL:** https://api.gemina.co/api/v1/mcp/
 **Transport:** Streamable HTTP (remote, hosted)
@@ -15,7 +15,7 @@
 
 **Description:**
 
-Gemina is a hosted MCP server for working with documents of any kind — invoices, receipts, contracts, forms, statements, delivery notes, or any other PDF or image your team handles. Define your own custom templates to extract exactly the fields you need from any document type. One endpoint, 14 tools in three groups.
+Gemina is a hosted MCP server for working with documents of any kind — invoices, receipts, contracts, forms, statements, delivery notes, or any other PDF or image your team handles. Define your own custom templates to extract exactly the fields you need from any document type. One endpoint, 13 tools in three groups.
 
 • FileTag (free tier, 1,500 tags/month, no credit card): turn any PDF or image into structured metadata, six suggested filenames, and a metadata-embedded copy. Upload a file (files_create_upload → tag_file) or point at a public URL (tag_url).
 

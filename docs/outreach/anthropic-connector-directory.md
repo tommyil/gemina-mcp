@@ -24,7 +24,7 @@ https://claude.com/docs/connectors/building/review-criteria (fetched
 | Public documentation live by publish date | ✗ https://www.gemina.co/docs/mcp 404 | Website branch. |
 | Fully populated **test account** with credentials + step-by-step reviewer instructions | pending | Create `mcp-review@` user on prod with a paid-tier plan and a handful of indexed sample documents so `query_documents` / `aggregate_documents` return data. |
 | Separate read vs write tools (no catch-all `api_request`) | ✓ | None. |
-| Tool names ≤ 64 chars | ✓ (longest: `files_create_extraction_upload`, 30) | None. |
+| Tool names ≤ 64 chars | ✓ (longest: `submit_extraction_feedback`, 26) | None. |
 | Server domain matches the service, first-party API | ✓ `api.gemina.co` | None. |
 | Not money transfer / not AI media generation | ✓ | None. |
 
@@ -37,7 +37,7 @@ https://claude.com/docs/connectors/building/review-criteria (fetched
    no "missing title/annotations" flags.
 4. **Listing**
    - Name (≤100): `Gemina`
-   - One-liner (≤200 in the portal, 2026-08-30): `Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 14 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.`
+   - One-liner (≤200 in the portal, 2026-08-30): `Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.`
    - Description (≤2000): reuse `docs/outreach/mcp-so-listing.md` description.
    - Categories (1–5): Productivity, Data & Analytics, Developer Tools,
      Finance (pick whatever the portal offers closest to these).

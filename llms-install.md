@@ -37,18 +37,17 @@
 
 ## 3. Tools exposed
 
-One server, 14 tools in three groups, plus 2 prompts. Anonymous discovery (`tools/list`, `prompts/list`) is served at `https://api.gemina.co/api/v1/mcp/public/`.
+One server, 13 tools in three groups, plus 2 prompts. Anonymous discovery (`tools/list`, `prompts/list`) is served at `https://api.gemina.co/api/v1/mcp/public/`.
 
 **FileTag (free tier)**
 
-- **`files_create_upload`** — Reserve a pre-signed upload slot. Returns `file_id`, a PUT URL, and the headers to echo on the PUT (slot expires in 5 minutes).
+- **`files_create_upload`** — Reserve a pre-signed upload slot. Returns `file_id`, a PUT URL, the headers to echo on the PUT (slot expires in 5 minutes), and a `next_tool_call` recipe: `tag_file` by default, `extract_document` when `purpose='extract'`. One slot type — any slot works with either tool.
 - **`tag_file`** — Tag a previously-uploaded file by `file_id`. Returns metadata, six suggested filename patterns, and a short-lived enriched-file URL.
 - **`tag_url`** — Fetch and tag a publicly-accessible HTTPS URL server-side (no private IPs, no redirects, 50 MB cap). Same response shape as `tag_file`.
 
 **Extraction (Core-OCR, paid)**
 
-- **`files_create_extraction_upload`** — Reserve a pre-signed upload slot for extraction (distinct from the FileTag slot). Follow the returned `next_tool_call` into `extract_document`.
-- **`extract_document`** — Run extraction on an uploaded slot with one or more `extraction_types`: `ocr`, `invoice_headers`, `invoice_line_items`, `document_details_hebrew`, `document_line_items_hebrew`, or `custom_template`.
+- **`extract_document`** — Run extraction on an uploaded slot (from `files_create_upload`) with one or more `extraction_types`: `invoice_headers`, `invoice_line_items`, `custom_template`, `ocr` (runs only on the `praetorian` model), or the legacy `document_details_hebrew` / `document_line_items_hebrew` (praetorian-only, not recommended). Recommended, not enforced: `velox` for headers, `invictus` with thinking for line items.
 - **`get_extraction_result`** — Poll an asynchronous extraction by `meta.correlationId`; returns the result or `IN_PROCESS`.
 - **`list_extractions`** — List past extractions, newest first; filter by `external_id`, `end_user_id`, or date window; paginate with `skip`/`limit`.
 - **`get_extraction`** — Fetch one extraction by id, including the full extracted data.

@@ -77,7 +77,7 @@ In a new chat, click the **hammer icon** (or paperclip, depending on version) ne
 - `tag_file`
 - `tag_url`
 
-The remaining ten are the extraction (`files_create_extraction_upload`, `extract_document`, `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `submit_extraction_feedback`) and document-intelligence (`query_documents`, `aggregate_documents`, `index_document`) tools, which need a paid plan — see the [tool reference](../../README.md#tools).
+The remaining ten are the extraction (`extract_document`, `get_extraction_result`, `list_extractions`, `get_extraction`, `get_document`, `add_document_extractions`, `submit_extraction_feedback` — slots come from the shared `files_create_upload`) and document-intelligence (`query_documents`, `aggregate_documents`, `index_document`) tools, which need a paid plan — see the [tool reference](../../README.md#tools).
 
 If you don't see them, see [Troubleshooting](#troubleshooting) below. On the `mcp-remote` fallback path, the first launch may take 10–30 seconds while `npx` downloads `mcp-remote`.
 
