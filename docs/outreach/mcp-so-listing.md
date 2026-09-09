@@ -15,7 +15,7 @@
 
 **Description:**
 
-Gemina is a hosted MCP server for working with documents of any kind — invoices, receipts, contracts, forms, statements, delivery notes, or any other PDF or image your team handles. Define your own custom templates to extract exactly the fields you need from any document type. One endpoint, 14 tools in three groups.
+Gemina is a hosted MCP server for working with documents of any kind — invoices, receipts, contracts, forms, statements, delivery notes, or any other PDF or image your team handles. Define your own custom templates to extract exactly the fields you need from any document type. One endpoint, 13 tools in three groups.
 
 • FileTag (free tier, 1,500 tags/month, no credit card): turn any PDF or image into structured metadata, six suggested filenames, and a metadata-embedded copy. Upload a file (files_create_upload → tag_file) or point at a public URL (tag_url).
 

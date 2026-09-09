@@ -8,7 +8,7 @@ The Glama badge slug must match the renamed Glama listing; replace
 `GLAMA_SLUG` with whatever Glama confirms (expected `tommyil/gemina-mcp`).
 
 ```markdown
-- [tommyil/gemina-mcp](https://github.com/tommyil/gemina-mcp) [![Gemina MCP server](https://glama.ai/mcp/servers/GLAMA_SLUG/badges/score.svg)](https://glama.ai/mcp/servers/GLAMA_SLUG) ☁️ 🍎 🪟 🐧 - Invoice OCR, document extraction, document search/aggregation, and free FileTag tagging (metadata + smart filenames for any PDF or image) for AI agents. Hosted Streamable HTTP; OAuth 2.1 or API key; 14 tools.
+- [tommyil/gemina-mcp](https://github.com/tommyil/gemina-mcp) [![Gemina MCP server](https://glama.ai/mcp/servers/GLAMA_SLUG/badges/score.svg)](https://glama.ai/mcp/servers/GLAMA_SLUG) ☁️ 🍎 🪟 🐧 - Invoice OCR, document extraction, document search/aggregation, and free FileTag tagging (metadata + smart filenames for any PDF or image) for AI agents. Hosted Streamable HTTP; OAuth 2.1 or API key; 13 tools.
 ```
 
 Legend used by the list: ☁️ cloud service, 🍎 🪟 🐧 platform support (any
