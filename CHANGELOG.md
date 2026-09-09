@@ -4,6 +4,13 @@ All notable changes to this repository — and to the Gemina MCP server's public
 
 ## [Unreleased]
 
+### Removed
+- **`files_create_extraction_upload`** (server 2026-09-09). It minted exactly the same upload slot as `files_create_upload` and only changed the returned `next_tool_call` recipe. Use `files_create_upload` — pass `purpose='extract'` to get an `extract_document` recipe; any slot works with either `tag_file` or `extract_document`. The server now exposes **13 tools** (this repo's listing copy had also been missing `add_document_extractions`; fixed). No MCP backwards compatibility is kept for the removed name; `server.json` stays at 2.1.0 pending a coordinated version bump with the API.
+
+### Changed
+- **Model choice guidance is now in the tool text**, as a recommendation the agent may override: `velox` for `invoice_headers`; `invictus` with `thinking=true` for `invoice_line_items` (and when both are requested). Plain `ocr` runs only on `praetorian`; the Hebrew types (`document_details_hebrew` / `document_line_items_hebrew`) are legacy, praetorian-only and not recommended for new work. Requests naming an unsupported model/type pair are now rejected at request time — before the slot, the blob, or the idempotency key (`external_id`) is consumed — instead of failing inside the pipeline.
+- `tag_file` now states that its `document_id` is the handle for `add_document_extractions`; `list_extractions` and `query_documents` describe when to use which.
+
 ### Added
 - **`add_document_extractions` now takes `wait`** (optional, defaults to `true` — the existing behaviour). Agents hit this tool with two different intents: some need the extracted values in the same turn, others only want the document filed so they can search it later. `wait=false` returns immediately with `newExtractionIds` and `pollCorrelationId` instead of holding the call; the extraction and its indexing still run to completion server-side, and the outcome — including a failure — shows up afterwards in `get_document` / `list_extractions`. Both modes are billed identically (paid per extraction; no re-upload). The tool's description and title now also name the payoff for the second workflow: a structured extraction is what puts a document into the searchable collection with the full field set, queryable via `query_documents` / `aggregate_documents` (indexing stays opt-in, plan-gated and best-effort; plain `ocr` is not indexed).
 

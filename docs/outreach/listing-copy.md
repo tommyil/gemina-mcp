@@ -2,7 +2,7 @@
 
 Use verbatim in every directory. Source of truth for wording.
 
-**One-liner:** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 14 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
+**One-liner:** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
 
 **Registry description (≤100):** Extract, search and tag any document: invoices, receipts, contracts, templates. OAuth or API key.
 

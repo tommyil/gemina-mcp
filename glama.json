@@ -4,7 +4,7 @@
     "tommyil"
   ],
   "name": "Gemina",
-  "description": "Extract, search and tag any document — invoices, receipts, contracts, forms, or your own custom templates. One remote Streamable HTTP endpoint, 14 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key. Data residency per account: EU, US, Israel or Asia.",
+  "description": "Extract, search and tag any document — invoices, receipts, contracts, forms, or your own custom templates. One remote Streamable HTTP endpoint, 13 tools + 2 prompts. Sign in with OAuth 2.1 or use an API key. Data residency per account: EU, US, Israel or Asia.",
   "homepage": "https://www.gemina.co/product/agents",
   "repository": "https://github.com/tommyil/gemina-mcp",
   "documentation": "https://www.gemina.co/docs/mcp",
@@ -38,7 +38,7 @@
       "name": "files_create_upload",
       "group": "FileTag",
       "tier": "free",
-      "description": "Reserve a pre-signed PUT slot for a file you'll tag. Returns file_id, the upload URL, and the headers to echo on the PUT."
+      "description": "Reserve a pre-signed PUT slot for a file you'll tag. Returns file_id, the upload URL, and the headers to echo on the PUT. purpose='extract' returns an extract_document recipe instead of tag_file; one slot type either way."
     },
     {
       "name": "tag_file",
@@ -53,16 +53,10 @@
       "description": "Fetch a public HTTPS URL server-side and tag it. The bytes never pass through the model context."
     },
     {
-      "name": "files_create_extraction_upload",
-      "group": "Extraction",
-      "tier": "paid",
-      "description": "Reserve a pre-signed PUT slot for extraction (distinct from the FileTag slot)."
-    },
-    {
       "name": "extract_document",
       "group": "Extraction",
       "tier": "paid",
-      "description": "Run one or more extraction types on an uploaded slot: ocr, invoice_headers, invoice_line_items, document_details_hebrew, document_line_items_hebrew, custom_template."
+      "description": "Run one or more extraction types on an uploaded slot from files_create_upload: invoice_headers, invoice_line_items, custom_template, ocr (praetorian model only), or the legacy Hebrew types (praetorian only). Recommended: velox for headers, invictus with thinking for line items."
     },
     {
       "name": "get_extraction_result",
@@ -87,6 +81,12 @@
       "group": "Extraction",
       "tier": "paid",
       "description": "Fetch one document by id, including all of its extractions."
+    },
+    {
+      "name": "add_document_extractions",
+      "group": "Extraction",
+      "tier": "paid",
+      "description": "Run more extraction types on a document Gemina already stores (by document id) — no re-upload; paid per extraction. wait=true returns the values, wait=false files it for later search."
     },
     {
       "name": "submit_extraction_feedback",
@@ -135,12 +135,12 @@
     "Extraction": {
       "tier": "paid",
       "tools": [
-        "files_create_extraction_upload",
         "extract_document",
         "get_extraction_result",
         "list_extractions",
         "get_extraction",
         "get_document",
+        "add_document_extractions",
         "submit_extraction_feedback"
       ]
     },

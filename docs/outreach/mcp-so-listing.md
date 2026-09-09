@@ -2,7 +2,7 @@
 
 **Title:** Gemina
 
-**Tagline (short):** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 14 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
+**Tagline (short):** Extract, search and tag any document — invoices, receipts, contracts, forms, or your own templates. 13 tools, one sign-in, free FileTag tier, data residency in the EU, US, Israel or Asia.
 
 **Server URL:** https://api.gemina.co/api/v1/mcp/
 **Transport:** Streamable HTTP (remote, hosted)

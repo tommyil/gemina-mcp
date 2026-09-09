@@ -14,9 +14,9 @@ Update for the reviewer: this submission has been renamed. The server is now
   an `X-API-Key` header for headless use. Free tier needs no credit card.
 - **Tools:** 13 on one endpoint, `https://api.gemina.co/api/v1/mcp/`:
   - FileTag (free): `files_create_upload`, `tag_file`, `tag_url`
-  - Extraction: `files_create_extraction_upload`, `extract_document`,
-    `get_extraction_result`, `list_extractions`, `get_extraction`,
-    `get_document`, `submit_extraction_feedback`
+  - Extraction: `extract_document`, `get_extraction_result`, `list_extractions`,
+    `get_extraction`, `get_document`, `add_document_extractions`,
+    `submit_extraction_feedback` (slots come from the shared `files_create_upload`)
   - Document Intelligence: `query_documents`, `aggregate_documents`,
     `index_document`
   - plus 2 prompts: `explain_filename_patterns`, `explain_upload_flow`
